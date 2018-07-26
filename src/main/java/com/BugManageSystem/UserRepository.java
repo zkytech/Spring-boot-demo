@@ -1,0 +1,16 @@
+package com.BugManageSystem;
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+
+
+public interface UserRepository extends JpaRepository<User, Integer> {
+
+    // 注意这里一定要写User 而不是user 因为这里还是对类名进行查询而不是直接对表进行查询。
+    @Query(value = "select u from User u where username=?1 and password=?2 and identity=?3")
+    List<User> loginCheck(String username, String password, Integer identity);
+
+}
