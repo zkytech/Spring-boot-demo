@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>提交漏洞</title>
+    <link rel="stylesheet" href="/css/no_border_padding_margin.css" type="text/css">
+    <link rel="stylesheet" href="/css/buttons.css" type="text/css">
+    <link rel="stylesheet" href="/css/tables.css">
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/ckeditor/ckeditor.js"></script>
+    <script src="/js/submitbug_functions.js"></script>
+    <style>
+        .input_text{
+            height: 90%;
+            width: auto;
+        }
+        .input_text_in_table{
+            margin-right: 2px;
+            margin-left: 2px;
+            margin-top: 1px;
+            margin-bottom: 1px;
+            /*width:350px;*/
+            width: 97%;
+            height: 85%;
+            border: 1px solid lightgray;
+        }
+    </style>
+</head>
+<body>
+<form th:object="${Bug}" method="post" action="/submitbug" >
+    <div style="height: 100%;width: 50%;border:hidden 0px;margin: 0 auto;">
+    <table class="hidden_table">
+        <tr>
+            <td>漏洞名称：</td><td><input type="text" name="bugname" id="bugname" class="input_text" required/><span class="star_mark">*</span></td>
+        </tr>
+        <tr>
+            <td>漏洞类型：</td>
+            <td>
+                <select name="bugtype" id="bugtype" class="input_text" style="width: max-content" required>
+                     <option th:each="bugtype : ${bugtypes}" th:value="${bugtype.id}" th:text="${bugtype.bugtype}"></option>
+                </select><span class="star_mark">*</span>
+            </td>
+        </tr>
+        <tr>
+            <td>漏洞评级：</td>
+            <td>
+                <select name="bugrank" id="bugrank" class="input_text">
+                    <option value="0">低危</option>
+                    <option value="1">中危</option>
+                    <option value="2">高危</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+
+    <!--存储拼接后的IP-->
+    <textarea hidden name="ip" id="ip"></textarea>
+
+    <!--存储拼接后的URL-->
+    <textarea hidden name="url" id="url"></textarea>
+    <textarea hidden name="submituser" th:text="${userid}"></textarea>
+    <button th:align="left" type="button" class="common_button" onclick="add_row()">添加</button>
+    <table class="shown_table" id="IUtable">
+        <tr>
+            <th style="width: 40%;text-align: center;">IP</th><th style="width: 40%;text-align: center;">URL</th><th style="width: 20%;text-align: center;">操作</th>
+        </tr>
+        <!--这里隐藏一行用来clone-->
+        <tr hidden id="tr_for_cp">
+            <td ><input class="input_text_in_table" type="text"/></td><td><input class="input_text_in_table" type="text" /></td><td><input type="button" value="删除" class="common_button" onclick="delete_row(this)"></td>
+        </tr>
+        <tr>
+            <td><input  class="input_text_in_table" type="text"/></td><td><input class="input_text_in_table" type="text" /></td><td><input type="button" value="删除" class="common_button" onclick="delete_row(this)"></td>
+        </tr>
+    </table>
+    <input type="button" class="commit_button" onclick="build_table()" value="漏洞提交"/>
+    <textarea name="description" id="description"></textarea>
+    </div>
+</form>
+<script>
+    CKEDITOR.replace("description");
+</script>
+</body>
+</html>

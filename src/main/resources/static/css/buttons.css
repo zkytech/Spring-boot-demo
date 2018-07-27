@@ -1,0 +1,44 @@
+.commit_button{
+    background-color: forestgreen;
+    border: none;
+    color: black;
+    padding: 7px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+.commit_button:hover{
+    background-color: darkgreen;
+}
+.common_button{
+    background-color: lightgray;
+    border: none;
+    color: black;
+    padding: 7px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+.common_button:hover{
+    background-color: darkgray;
+}
+.pbtn {
+    padding: 0px;
+    margin: 0px;
+    background-color: white;
+    border: 1px solid #e7e7e7;
+}
+
+.pbtn:hover {
+    background-color: #e7e7e7;
+}

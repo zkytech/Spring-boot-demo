@@ -1,33 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>注册</title>
+    <script>
+        function check_pwd(){
+            var pwd = document.getElementById("password").value;
+            var pwd1 = document.getElementById("check_password").value;
+            var alert1=document.getElementById("alert");
+            if(pwd == pwd1) {
+                alert1.setAttribute("hidden", "hidden");
+                return true;
+            }else {
+                alert1.removeAttribute("hidden");
+                return false;
+            }
+
+        }
+    </script>
 </head>
 <body>
-<form action="/signup" method="post">
-    <label for="username">用户名</label><input type="text" id="username" name="username" required />
-    <label for="password">密码</label><input type="password" id="password" name="password" required />
-    <!--<label for="check_password">确认密码</label><input type="password" id="check_password" name="password" required/><p hidden="hidden" style="color: red" id="alert">两次输入密码不一致</p>-->
-    <label for="identity">用户身份</label><select name="identity" id="identity">
-        <option value="0">普通用户</option>
-        <option value="1">管理员</option>
-    </select>
-    <input type="submit" value="提交" onsubmit="check_password()"/>
+
+<form action="/signup" method="post" onsubmit="return check_pwd()">
+    <table style="padding-left: 30%;padding-top: 5%">
+        <tr><td><label for="username">用户名</label></td><td><input type="text" id="username" name="username" required /></td><td><p th:if="${message}" th:text="${message}"></p></td></tr>
+        <tr><td><label for="password">密码</label></td><td><input  type="password" id="password" name="password" required /></td><td></td></tr>
+        <tr><td><label for="check_password">确认密码</label></td><td><input  type="password" id="check_password" name="check_password" required/></td><td><p hidden="hidden" style="color: red" id="alert">两次输入密码不一致</p></td></tr>
+        <tr><td><label for="identity">用户身份</label></td><td><select name="identity" id="identity">
+            <option value="0">普通用户</option>
+            <option value="1">管理员</option>
+        </select></td><td></td></tr>
+    <tr><td></td><td><br><input type="submit" id="submit" value="提交"  /></td><td></td></tr>
+    </table>
 </form>
-<script>
-    function check_password(){
-        var pwd = document.getElementById("password").value;
-        var pwd1 = document.getElementById("check_password").value;
-        var alert = document.getElementById("alert");
-        if(pwd == pwd1) {
-            alert.setAttribute("hidden", "hidden");
-            return true;
-        }else {
-            alert.removeAttribute("hidden");
-            return false;
-        }
-    }
-</script>
+
 </body>
 </html>

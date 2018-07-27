@@ -20,10 +20,11 @@ public class DataInitialization implements CommandLineRunner {
         repository.save(new User("Michelle", "Dessler@gmail.com"));
         System.out.println("User found with find All()");
         System.out.println("------------------------------");
-        for (User user: repository.findAll()){
-            System.out.println(user);
-        }
+//        for (User user: repository.findAll()){
+//            System.out.println(user);
+//        }
 
+        System.out.println(repository.findUserById(new Long(2)));
     }
 
     public List<User> helloWorld(){

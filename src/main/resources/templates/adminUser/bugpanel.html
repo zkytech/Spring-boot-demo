@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;width: 100%;">
+<head>
+    <link href="/css/no_border_padding_margin.css" rel="stylesheet" type="text/css">
+    <meta charset="UTF-8">
+    <title>漏洞管理面板</title>
+    <link href="/css/buttons.css" rel="stylesheet" type="text/css">
+    <style>
+        #left_frame{
+            height:max-content;width:20%;float: left;
+        }
+        #rignt_frame{
+            height: 100%;width:80%;float:left;
+        }
+    </style>
+</head>
+<body style="height: 100%;width: 100%">
+<div id="left_frame">
+    <!--搜索功能区-->
+    <form method="get" action="/admin/buglist" target="list_frame" id="search_form">
+        <span><input type="text" name="keyword"/></span>
+        <span><input type="submit" value="搜索"/></span>
+        <input type="text" name="page" id="page" value="1" hidden/>
+        <input type="text" name="size" id="size" value="10" hidden/>
+    </form>
+</div>
+
+<div id="rignt_frame">
+    <!--搜索结果显示区域-->
+    <iframe src="/admin/buglist" style="height: 100%;width:100%" id="list_frame" name="list_frame">
+
+    </iframe>
+</div>
+</body>
+</html>
