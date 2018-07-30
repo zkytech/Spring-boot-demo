@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -43,26 +44,32 @@ public class UserController {
             return "redirect:/index";
         }else {
             //登录验证失败
-            model.addAttribute("message", true);
+            model.addAttribute("message", "账号或密码错误");
             return "login";
         }
     }
 
     @RequestMapping("/index")
     public String indexPage(HttpSession session, Model model){
-        Integer identity =(Integer) session.getAttribute("identity");
-        String username =(String) session.getAttribute("username");
+        Integer identity_num =(Integer) session.getAttribute("identity");   // 在adminInterceptor中检查这一属性
+        String username =(String) session.getAttribute("username");     // 在loginInterceptor中检查这一属性
         Integer userid = (Integer) session.getAttribute("userid");
+        String identity= "";
+        switch (identity_num){
+            case 0:identity="用户";break;
+            case 1:identity="审核员";break;
+        }
+        model.addAttribute("identity", identity);
         model.addAttribute("username", username);
         model.addAttribute("userid", userid);
-        if(identity == 0) {
-            //普通用户
-            return "/commonUser/INDEX";
-        }else{
-            if (identity==1){
-                return "/adminUser/INDEX";
-            }
-        }
+//        if(identity == 0) {
+//            //普通用户
+//            return "/commonUser/INDEX";
+//        }else{
+//            if (identity==1){
+//                return "/adminUser/INDEX";
+//            }
+//        }
         return "INDEX";
     }
 
@@ -84,7 +91,10 @@ public class UserController {
         redirectAttributes.addFlashAttribute("message", "注册成功，现在开始登录吧！");
         return "redirect:/";
     }
-
+    @RequestMapping("/test")
+    public String testPage(){
+        return "test";
+    }
 
 
 }

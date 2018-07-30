@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" style="margin: 0;padding: 0;border: 0">
+<head>
+    <meta charset="UTF-8">
+    <title>漏洞信息</title>
+    <link href="/css/tables.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/css/no_border_padding_margin.css" type="text/css">
+
+
+</head>
+<body>
+<br>
+<br>
+<br>
+
+    <table class="shown_table" style="margin:0 auto;width: 80%">
+        <tr>
+            <th width="15%">漏洞名称</th><td width="45%" th:text="${bug.bugname}"></td>
+        </tr>
+        <tr>
+            <th>漏洞ID</th><td th:text="${bug.id}"></td>
+        </tr>
+        <tr>
+            <th>漏洞类型</th><td th:text="${bug.bugtype}"></td>
+        </tr>
+        <tr>
+            <th>URL</th>
+            <td>
+                <ol>
+                  <li th:each="url_s:${bug.url}" th:text="${bug.url[url_sStat.index]}"></li>
+                </ol>
+            </td>
+        </tr>
+        <tr>
+            <th>IP</th>
+            <td>
+                <ol>
+                    <li th:each="ip_s:${bug.ip}" th:text="${ip_s}"></li>
+                </ol>
+            </td>
+        </tr>
+        <tr>
+            <th>漏洞评级</th><td th:text="${bug.bugrank}"></td>
+        </tr>
+        <tr>
+            <th>漏洞描述</th><td th:utext="${bug.description}"></td>
+        </tr>
+        <tr>
+            <th>提交者ID</th><td th:text="${bug.submituser}"></td>
+        </tr>
+        <tr>
+            <th>提交时间</th><td th:text="${bug.date}"></td>
+        </tr>
+        <tr>
+            <th>审核状态</th><td th:text="${bug.checkstatus}"></td>
+        </tr>
+    </table>
+</body>
+</html>

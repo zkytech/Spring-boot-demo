@@ -1,22 +1,15 @@
 package com.BugManageSystem.Controller;
 
 import com.BugManageSystem.Bean.FormatedBug;
-import com.BugManageSystem.Entity.Bug;
-import com.BugManageSystem.Entity.BugRepository;
-import com.fasterxml.jackson.databind.ser.std.StdArraySerializers;
-import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
+import com.BugManageSystem.Bean.Workorder_Factory;
+import com.BugManageSystem.Entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,55 +17,67 @@ import java.util.List;
 public class AdminController {
     @Autowired
     BugRepository bugRepository;
+    @Autowired
+    TypesRepository typesRepository;
+    @Autowired
+    DepartmentRepository departmentRepository;
+    @Autowired
+    HandlerRepository handlerRepository;
+    @Autowired
+    WorkorderRepository workorderRepository;
 
 
-    @GetMapping("/bugpanel")
-    String bugpanelPage(){
-        return "/adminUser/bugpanel";
+    @GetMapping("/managebug")
+    String managebugPage(@RequestParam(required = true)Long id, Model model){
+        FormatedBug bug = bugRepository.findBugByid(id).getFormatedBug();
+        List<Types> bugtypes = typesRepository.findAll();
+        List<Department> departments = departmentRepository.findAll();
+        model.addAttribute("bug",bug);
+        model.addAttribute("bugtypes",bugtypes);
+        model.addAttribute("departments",departments);
+        return "/adminUser/managebug";
     }
 
-    @GetMapping("/buglist")
-    String buglistPage(@RequestParam(required = false,defaultValue = "")String keyword,@RequestParam(required = false, defaultValue = "1")Integer page,
-            @RequestParam(required = false,defaultValue = "10") Integer size, Model model){
-        Sort sort = new Sort(Sort.Direction.ASC, "id");
-        Pageable pageable = new PageRequest(page-1,size,sort);
-        long row_count = bugRepository.count(); // 获取总行数
-        System.out.println("总行数："+row_count);
-        long max_page = row_count/size; // 计算最大分页数
-        if(row_count%size!=0){
-            max_page+=1;
-        }
-        List<Bug> bugs = bugRepository.findAllByBugnameContains(keyword,pageable);
-        List<FormatedBug> formatedBugs = new ArrayList<FormatedBug>();
-        for (Bug bug: bugs){
-            formatedBugs.add(bug.getFormatedBug());
-        }
-        model.addAttribute("bugs", formatedBugs);
-        model.addAttribute("page",page);
-        model.addAttribute("max_page",max_page);
+    @PostMapping("managebug")
+    String managebug(Workorder_Factory workorder_factory, Boolean refused, Model model){
+        if(refused){
+            // 漏洞被拒绝审核
 
-        // 生成翻页按钮序列
-        int start = page-5;
-        int end = page+5;
-        if (start<1){
-            end +=1-start;
-            start=1;
-        }
-        if (end>max_page){
-            start-=end-max_page;
-            end=(int)max_page;
-        }
-        if(start<1){
-            start=1;
-        }
-        List<Integer> pages = new ArrayList();
-        for(int i = start; i<=end;i++){
-            pages.add(i);
-        }
-        model.addAttribute("pages", pages);
+            Bug bug = bugRepository.findBugByid(workorder_factory.getBugid());
+            System.out.println(workorder_factory.getBugid());
+            bug.setcheckstatus(2);  //将bug状态设置为2
+            bugRepository.save(bug);    //将修改更新到数据库
+            String message = "已拒绝该漏洞 ！<script>setTimeout(function(){" +
+                    "window.parent.location='/bugpanel'}, 1000)</script>";
+            model.addAttribute("message", message);
 
-        return "/adminUser/buglist";
+        }else{
+            List<Workorder> workorders = workorder_factory.getWorkorders();
+            for(Workorder workorder:workorders){
+                workorderRepository.save(workorder);
+            }
+            String message = "工单提交成功 ！<script>setTimeout(function(){" +
+                    "window.parent.location='/bugpanel'}, 1000)</script>";
+            model.addAttribute("message", message);
+        }
+        return "message";
     }
 
+    @GetMapping("/handlers")
+    String handlersPage(@RequestParam(required = true)Integer dpt_num, Model model){
+        List<Handler> handlers = handlerRepository.findAllByDepartment(dpt_num);
+        model.addAttribute("handlers", handlers);
+        return "/adminUser/handlers";
+    }
+
+    @GetMapping("/comment")
+    String commentPage(@RequestParam(required = false,defaultValue = " ")String comment, Model model){
+        if(comment.equals("null")){
+            comment="";
+        }
+        model.addAttribute("comment", comment);
+        System.out.println("comment:"+comment);
+        return "/adminUser/comment";
+    }
 
 }

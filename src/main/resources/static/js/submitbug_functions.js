@@ -28,6 +28,7 @@ function add_row(){
     // 实现增加行的功能
     var tr = document.getElementById("tr_for_cp").cloneNode(true);  // 这里需要克隆后代，所以设置为true，默认为false
     tr.removeAttribute("hidden");
+    tr.removeAttribute("id");
     tr.getElementsByTagName("input").item(0).setAttribute("required","required");
     tr.getElementsByTagName("input").item(1).setAttribute("required","required");
     document.getElementById("IUtable").appendChild(tr);

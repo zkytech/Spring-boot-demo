@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #div1{
+            position: absolute;
+            top:0px;
+            height: 50px;
+            width: 100%;
+            background-color: #5cb85c;
+        }
+        #div2{
+            position: absolute;
+            top:50px;
+            bottom: 0px;
+            width: 100%;
+            background-color: #0f74a8;
+        }
+    </style>
+</head>
+<body>
+<div id="div1">
+    <p id="p1"></p>
+</div>
+<div id="div2">
+    <p id="p2"></p>
+    <form action="/fileupload" method="post" enctype="multipart/form-data">
+        <input type="file" name="upload">
+        <input type="submit" value="提交">
+    </form>
+</div>
+
+</body>
+
+</html>

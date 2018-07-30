@@ -6,26 +6,12 @@
     <title>提交漏洞</title>
     <link rel="stylesheet" href="/css/no_border_padding_margin.css" type="text/css">
     <link rel="stylesheet" href="/css/buttons.css" type="text/css">
-    <link rel="stylesheet" href="/css/tables.css">
+    <link rel="stylesheet" href="/css/tables.css" type="text/css">
+    <link rel="stylesheet" href="/css/inputElements.css" type="text/css">
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/ckeditor/ckeditor.js"></script>
     <script src="/js/submitbug_functions.js"></script>
-    <style>
-        .input_text{
-            height: 90%;
-            width: auto;
-        }
-        .input_text_in_table{
-            margin-right: 2px;
-            margin-left: 2px;
-            margin-top: 1px;
-            margin-bottom: 1px;
-            /*width:350px;*/
-            width: 97%;
-            height: 85%;
-            border: 1px solid lightgray;
-        }
-    </style>
+
 </head>
 <body>
 <form th:object="${Bug}" method="post" action="/submitbug" >
@@ -56,6 +42,7 @@
 
     <!--存储拼接后的IP-->
     <textarea hidden name="ip" id="ip"></textarea>
+    <textarea hidden name="checkstatus" id="checkstatus">0</textarea>
 
     <!--存储拼接后的URL-->
     <textarea hidden name="url" id="url"></textarea>
@@ -73,7 +60,7 @@
             <td><input  class="input_text_in_table" type="text"/></td><td><input class="input_text_in_table" type="text" /></td><td><input type="button" value="删除" class="common_button" onclick="delete_row(this)"></td>
         </tr>
     </table>
-    <input type="button" class="commit_button" onclick="build_table()" value="漏洞提交"/>
+    <input type="button" class="submit_button" onclick="build_table()" value="漏洞提交"/>
     <textarea name="description" id="description"></textarea>
     </div>
 </form>

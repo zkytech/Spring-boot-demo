@@ -1,4 +1,4 @@
-.commit_button{
+.submit_button{
     background-color: forestgreen;
     border: none;
     color: black;
@@ -12,7 +12,7 @@
     transition-duration: 0.4s;
     cursor: pointer;
 }
-.commit_button:hover{
+.submit_button:hover{
     background-color: darkgreen;
 }
 .common_button{

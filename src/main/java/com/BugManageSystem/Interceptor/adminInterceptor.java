@@ -11,7 +11,11 @@ public class adminInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
         Integer identity = (Integer)session.getAttribute("identity");
-        if (identity == 1){return true;}else{
+        if (identity == 1){
+            // 是管理员，允许访问
+            return true;
+        }else{
+            // 普通用户禁止访问管理员页面
             response.setHeader("content-type", "text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("<html><body><br><br><h3 align='center'>非法访问！</h3><script>setTimeout(function(){window.top.location='/'},1000)</script></body></html>");

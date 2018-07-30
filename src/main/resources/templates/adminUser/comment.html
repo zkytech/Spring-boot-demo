@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>填写意见</title>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/ckeditor/ckeditor.js"></script>
+    <link rel="stylesheet" href="/css/buttons.css" type="text/css">
+</head>
+<body>
+
+<textarea cols="50" rows="30" name="comment" id="comment" th:text="${comment}" >
+
+</textarea>
+
+<button type="button" onclick="save_comment()" class="submit_button">保存</button>
+<script>
+    CKEDITOR.replace("comment");
+    function save_comment(){
+        var target = window.parent.document.getElementById("comment");
+        var comment = CKEDITOR.instances.comment.getData();
+
+        target.setAttribute("value", comment);
+        target.removeAttribute("id");   //移除标记
+        window.parent.document.getElementById("box_window").style.display="none";
+    }
+</script>
+</body>
+</html>

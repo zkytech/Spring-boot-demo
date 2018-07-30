@@ -12,18 +12,19 @@ import java.util.Date;
 public class Bug {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
-    public String bugname;
-    public Integer bugtype;
-    public String url;
-    public String ip;
-    public Integer bugrank;
-    public String description;
-    public Integer submituser;
-    public Long date;
+    private Long id;
+    private String bugname;
+    private Integer bugtype;
+    private String url;
+    private String ip;
+    private Integer bugrank;
+    private String description;
+    private Integer submituser;
+    private Long date;
+    private Integer checkstatus;
     protected Bug(){};
 
-    public Bug(String bugname, Integer bugtype, String url, String ip, Integer bugrank, String description, Integer submituser) {
+    public Bug(String bugname, Integer bugtype, String url, String ip, Integer bugrank, String description, Integer submituser, Integer checkstatus) {
         this.bugname = bugname;
         this.bugtype = bugtype;
         this.url = url;
@@ -31,9 +32,18 @@ public class Bug {
         this.bugrank = bugrank;
         this.description = description;
         this.submituser = submituser;
+        this.checkstatus = checkstatus;
         this.date=new Date().getTime();
     }
 
+
+    public Integer getcheckstatus() {
+        return checkstatus;
+    }
+
+    public void setcheckstatus(Integer checkstatus) {
+        this.checkstatus = checkstatus;
+    }
 
     public String getBugname() {
         return bugname;
@@ -103,6 +113,6 @@ public class Bug {
     }
 
     public FormatedBug getFormatedBug(){
-        return new FormatedBug(id, bugname, bugtype, url, ip, bugrank, description, submituser, date);
+        return new FormatedBug(id, bugname, bugtype, url, ip, bugrank, description, submituser, date, checkstatus);
     }
 }
