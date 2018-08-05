@@ -2,55 +2,40 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/css/tables.css">
-    <link rel="stylesheet" type="text/css" href="/css/buttons.css">
-    <link rel="stylesheet" type="text/css" href="/css/no_border_padding_margin.css">
-    <link rel="stylesheet" type="text/css" href="/css/box_window.css">
-    <style>
-        #page_index {
-            border: hidden 0px;
-            padding: 0px;
-            margin: 0 auto;
-        }
-
-        #page_index tr, td {
-            border: hidden 0px;
-            margin: 0px;
-            padding: 0px;
-        }
-
-        #page_index td {
-            height: 35px;
-            width: 30px;
-        }
-
-        .pbtn {
-            height: 100%;
-            width: 100%;
-        }
-        .pbtn:hover{
-            cursor: pointer;
-        }
-
-        .bug_tr:hover{
-            background-color: #e7e7e7;
-        }
-
-    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>漏洞列表</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="author" content="张坤元">
+    <link rel="icon" href="/static/img/%E9%BE%99%E7%8C%AB%E5%A4%B4%E5%83%8F.jpg">
+    <meta name="description" content="工单管理系统">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
+    <style>
+    .table th, .table td { 
+                        text-align: center!important;
+                        vertical-align: middle!important;
+                        }
+    </style>
 </head>
-<body style="height: max-content">
-<table class="shown_table" style="width:90%;position: absolute;top: 20px;left: 20px;">
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12" style="padding: 0">
+            
+            <table class="table table-bordered table-hover" style="width: 100%">
+    <thead>
     <tr>
-        <th style="width: 20%">名称</th>
-        <th style="width: 15%">类型</th>
-        <th style="width: 15%">等级</th>
-        <th style="width: 20%">时间</th>
-        <th style="width: 15%">详细信息</th>
-        <th th:if="${identity} eq 1" style="width: 15%">操作</th>
+        <th>名称</th>
+        <th>类型</th>
+        <th>等级</th>
+        <th>时间</th>
+        <th>详细信息</th>
+        <th th:if="${identity} eq 1" >操作</th>
         <!--管理员页面才会显示操作栏-->
     </tr>
+    </thead>
+    <tbody>
     <!--遍历生成每一行数据-->
     <tr th:each="bug:${bugs}" class="bug_tr">
         <td th:text="${bug.bugname}"></td>
@@ -58,54 +43,58 @@
         <td th:text="${bug.bugrank}"></td>
         <td th:text="${bug.date}"></td>
         <td>
-            <button class="common_button" th:onclick="'javascript:show_info('+${bug.id}+')'">详细信息</button>
+            <button class="btn btn-default"  data-toggle="modal" data-target="#myModal" th:onclick="'javascript:show_info('+${bug.id}+')'">详细信息</button>
         </td>
         <td th:if="${identity} eq 1">
             <!--管理员页面才会显示操作栏-->
-            <button type="button" class="common_button" th:onclick="'javascript:manage_bug('+${bug.id}+')'">操作</button>
+            <button type="button" class="btn btn-default"  th:onclick="'javascript:manage_bug('+${bug.id}+')'">
+              操作
+            </button>
         </td>
     </tr>
-    <tr style="border-left: hidden;border-right: hidden;border-bottom: hidden;">
-        <td colspan="7">
-            <table id="page_index">
-                <tr>
-                    <td th:if="${page}&gt;1" style="height: 35px;width: 60px;">
-                        <button type="button" class="pbtn" th:onclick="'javascript:change_page('+${page-1}+')'">上一页</button>
-                    </td>
-                    <td th:each="num:${pages}" style="height: 35px;width: 30px;border:0px" th:switch="${num}">
-            <span th:case="${page}" th:text="${page}"
-                  style="text-align: center;font-size: larger;width:100%;display:block;"></span>
-                        <span th:case="${num}"><button class="pbtn" th:text="${num}" type="button"
-                                                       th:onclick="'javascript:change_page('+${num}+')'"></button></span>
-                    </td>
-                    <td th:if="${page}&lt;${max_page}" style="height: 35px;width: 60px;">
-                        <button th:with="next=(${page}+1)" type="button" class="pbtn"
-                                th:onclick="'javascript:change_page('+${page+1}+')'">下一页
-                        </button>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
+    </tbody>
 </table>
-
-<div id="box_window">
-    <!--弹窗-->
-    <div id="box_content">
-        <div id="box_head">
-            <!--弹窗头部-->
-            <span style="text-align: center;font-size: large;width:available;display:block;float: left">漏洞详情</span>
-            <span class="close">&times;</span>
-        </div>
-        <div id="box_body">
-            <!--弹窗主体-->
-            <iframe id="box_frame"></iframe>
+<nav aria-label="Page navigation">
+  <ul class="pagination" style="margin-left: 30%;">
+    <li th:if="${page}&gt;1">
+      <a aria-label="Previous" th:href="'javascript:change_page('+${page-1}+')'">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li th:each="num:${pages}" th:switch="${num}" th:class="${num eq page}?'active'">
+        <a  th:case="${num}" th:href="'javascript:change_page('+${num}+')'" th:text="${num}"></a>
+      </li>
+      <li>
+      <a th:href="'javascript:change_page('+${page+1}+')'" th:if="${page}&lt;${max_page}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
         </div>
     </div>
 </div>
+    
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">漏洞详情</h4>
+      </div>
+      <div class="modal-body" >
+        <iframe id="box_frame" style="width: 100%;border: 0;padding: 0;margin: 0;" onload="this.height=window.document.documentElement.clientHeight*0.6" ></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
 <script>
-    var box_window = document.getElementById("box_window");
-    var span = document.getElementsByClassName("close")[0];
     var box_frame = document.getElementById("box_frame");
 
     function manage_bug(id) {
@@ -119,12 +108,8 @@
 
     function show_info(id) {
         box_frame.setAttribute("src", "/showinfo?id=" + id);
-        box_window.style.display = "block";
     }
 
-    span.onclick = function () {
-        box_window.style.display = "none";
-    }
 
 
 </script>

@@ -43,10 +43,11 @@ public class BugController {
     }
 
     @PostMapping("/submitbug")
-    public String submitbug(Bug bug) {
+    public String submitbug(Bug bug,Model model) {
         System.out.println(bug.getBugname());
         bugRepository.save(bug);
-        return "redirect:/submitbug";
+        model.addAttribute("message", "成功提交！<script>setTimeout(function(){window.location='/submitbug'},1000)</script>");
+        return "message";
     }
 
     @PostMapping("/addbugtype")
@@ -63,7 +64,7 @@ public class BugController {
 
     @GetMapping("/buglist")
     public String buglistPage(@RequestParam(required = true, defaultValue = "") String keyword, @RequestParam(required = true, defaultValue = "1") Integer page,
-                              @RequestParam(required = true, defaultValue = "15") Integer size, @RequestParam(required = true, defaultValue = "bugname") String searchby, HttpSession session, Model model, @RequestParam(required = true, defaultValue = "0") Integer[] checkstatus) {
+                              @RequestParam(required = true, defaultValue = "10") Integer size, @RequestParam(required = true, defaultValue = "bugname") String searchby, HttpSession session, Model model, @RequestParam(required = true, defaultValue = "0") Integer[] checkstatus) {
         Integer userid = (Integer) session.getAttribute("userid");
         Integer identity = (Integer) session.getAttribute("identity");
         Sort sort = new Sort(Sort.Direction.DESC, "id");
@@ -190,6 +191,7 @@ public class BugController {
     @GetMapping("/bugpanel")
     String bugpanelPage(HttpSession session, Model model) {
         model.addAttribute("identity", (Integer) session.getAttribute("identity"));
+
         return "bugpanel";
     }
 

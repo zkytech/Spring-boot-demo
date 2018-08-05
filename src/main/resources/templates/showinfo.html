@@ -2,19 +2,19 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org" style="margin: 0;padding: 0;border: 0">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>漏洞信息</title>
-    <link href="/css/tables.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="/css/no_border_padding_margin.css" type="text/css">
-
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="author" content="张坤元">
+    <link rel="icon" href="/static/img/%E9%BE%99%E7%8C%AB%E5%A4%B4%E5%83%8F.jpg">
+    <meta name="description" content="工单管理系统">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
 
 </head>
 <body>
-<br>
-<br>
-<br>
-
-    <table class="shown_table" style="margin:0 auto;width: 80%">
+    <table class="table table-bordered table-hover" style="margin:0 auto;width: 90%">
         <tr>
             <th width="15%">漏洞名称</th><td width="45%" th:text="${bug.bugname}"></td>
         </tr>
@@ -27,17 +27,17 @@
         <tr>
             <th>URL</th>
             <td>
-                <ol>
+                <ul>
                   <li th:each="url_s:${bug.url}" th:text="${bug.url[url_sStat.index]}"></li>
-                </ol>
+                </ul>
             </td>
         </tr>
         <tr>
             <th>IP</th>
             <td>
-                <ol>
+                <ul>
                     <li th:each="ip_s:${bug.ip}" th:text="${ip_s}"></li>
-                </ol>
+                </ul>
             </td>
         </tr>
         <tr>
@@ -56,5 +56,8 @@
             <th>审核状态</th><td th:text="${bug.checkstatus}"></td>
         </tr>
     </table>
+    
+        <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

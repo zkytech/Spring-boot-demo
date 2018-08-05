@@ -3,27 +3,33 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <title>填写意见</title>
-    <script src="/js/jquery-3.3.1.min.js"></script>
-    <script src="/ckeditor/ckeditor.js"></script>
-    <link rel="stylesheet" href="/css/buttons.css" type="text/css">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="author" content="张坤元">
+    <link rel="icon" href="/static/img/%E9%BE%99%E7%8C%AB%E5%A4%B4%E5%83%8F.jpg">
+    <meta name="description" content="工单管理系统">
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/ckeditor/ckeditor.js"></script>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
 </head>
 <body>
 
 <textarea cols="50" rows="30" name="comment" id="comment" th:text="${comment}" >
 
 </textarea>
-
-<button type="button" onclick="save_comment()" class="submit_button">保存</button>
+<button type="button" class="btn btn-success" onclick="save_comment()">保存</button>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
 <script>
     CKEDITOR.replace("comment");
     function save_comment(){
         var target = window.parent.document.getElementById("comment");
         var comment = CKEDITOR.instances.comment.getData();
-
         target.setAttribute("value", comment);
         target.removeAttribute("id");   //移除标记
-        window.parent.document.getElementById("box_window").style.display="none";
+        window.parent.close_modal();
     }
 </script>
 </body>

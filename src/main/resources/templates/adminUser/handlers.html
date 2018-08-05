@@ -3,12 +3,18 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>handlers</title>
-    <link rel="stylesheet" href="/css/buttons.css" type="text/css">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="author" content="张坤元">
+    <link rel="icon" href="/static/img/%E9%BE%99%E7%8C%AB%E5%A4%B4%E5%83%8F.jpg">
+    <meta name="description" content="工单管理系统">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
 </head>
 <body>
 <span th:each="handler:${handlers}">
-    <button class="common_button" th:text="${handler.name}" th:id="'name'+${handlerStat.count}" th:onclick="'sethandler('+${handlerStat.count}+')'"></button>
+    <button class="btn btn-default" th:text="${handler.name}" th:id="'name'+${handlerStat.count}" th:onclick="'sethandler('+${handlerStat.count}+')'"></button>
     <textarea th:value="${handler.id}" th:id="'id'+${handlerStat.count}" hidden></textarea>
     <textarea th:value="${handler.phone}" th:id="'phone'+${handlerStat.count}" hidden></textarea>
 </span>
@@ -23,7 +29,7 @@
         target.getElementsByClassName("name")[0].innerText=name;
         target.getElementsByClassName("phone")[0].innerText=phone;
         target.getElementsByTagName("td").item(3).getElementsByTagName("input").item(0).setAttribute("value", id);
-        window.parent.document.getElementById("box_window").style.display="none";
+        window.parent.close_modal();
         //删除标记
         target.removeAttribute("id");
     }

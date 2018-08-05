@@ -3,7 +3,16 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>注册</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="author" content="张坤元">
+    <link rel="icon" href="/static/img/%E9%BE%99%E7%8C%AB%E5%A4%B4%E5%83%8F.jpg">
+    <meta name="description" content="工单管理系统">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/static/css/signin.css">
+
     <script>
         function check_pwd(){
             var pwd = document.getElementById("password").value;
@@ -21,19 +30,39 @@
     </script>
 </head>
 <body>
+<div class="container">
+<form action="/signup" class="form-signin" method="post" onsubmit="return check_pwd()">
 
-<form action="/signup" method="post" onsubmit="return check_pwd()">
-    <table style="padding-left: 30%;padding-top: 5%">
-        <tr><td><label for="username">用户名</label></td><td><input type="text" id="username" name="username" required /></td><td><p th:if="${message}" th:text="${message}"></p></td></tr>
-        <tr><td><label for="password">密码</label></td><td><input  type="password" id="password" name="password" required /></td><td></td></tr>
-        <tr><td><label for="check_password">确认密码</label></td><td><input  type="password" id="check_password" name="check_password" required/></td><td><p hidden="hidden" style="color: red" id="alert">两次输入密码不一致</p></td></tr>
-        <tr><td><label for="identity">用户身份</label></td><td><select name="identity" id="identity">
-            <option value="0">普通用户</option>
-            <option value="1">管理员</option>
-        </select></td><td></td></tr>
-    <tr><td></td><td><br><input type="submit" id="submit" value="提交"  /></td><td></td></tr>
-    </table>
+        <div th:if="${success}"  class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <p th:text="${success}"></p>
+        </div>
+        <div th:if="${alert}"  class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <p th:text="${alert}"></p>
+        </div>
+        <h2 class="form-signin-heading">请注册</h2>
+        <label for="username" class="sr-only">用户名</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="用户名" required autofocus>
+        <label for="password" class="sr-only">密码</label>
+        <input type="password" class="form-control" placeholder="密码" required name="password" id="password">
+
+        <label for="password" class="sr-only">确认密码</label>
+        <input type="password" class="form-control" placeholder="密码" required name="password" id="check_password">
+
+        <label for="identity" class=sr-only>用户身份</label>
+        <select class="form-control" name="identity" id="identity">
+            <option value="0" selected>
+                普通用户
+            </option>
+            <option value="1">
+                审核员
+            </option>
+        </select>
+        <br>
+        <button type="submit" class="btn btn-primary btn-block btn-lg" onsubmit="check_pwd()">注册</button>
+
 </form>
-
+</div>
 </body>
 </html>

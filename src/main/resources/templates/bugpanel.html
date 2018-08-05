@@ -2,41 +2,15 @@
 <html lang="en" style="height: 100%;width: 100%;" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>漏洞管理面板</title>
-    <link rel="stylesheet" href="/css/no_border_padding_margin.css" type="text/css">
-    <link rel="stylesheet" href="/css/buttons.css" type="text/css">
-    <link rel="stylesheet" href="/css/tables.css" type="text/css">
-    <link rel="stylesheet" href="/css/inputElements.css" type="text/css">
-    <style>
-        #left_frame{
-            position: absolute;
-            left: 0;
-            top:0;
-            width:400px;
-        }
-        #rignt_frame{
-            position: absolute;
-            left: 450px;
-            top:0;
-            bottom: 0;
-            right: 0;
-        }
-        .span1{
-            border: 0;
-            padding: 0;
-            margin: 0;
-            float: left;
-            height: 100%
-        }
-        .option{
-            color: dimgray;
-        }
-        .option:checked{
-            color: #000000;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="author" content="张坤元">
+    <link rel="icon" href="/static/img/%E9%BE%99%E7%8C%AB%E5%A4%B4%E5%83%8F.jpg">
+    <meta name="description" content="工单管理系统">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
     <script>
         function submitNewBug(){
             window.parent.location="/submitbug";
@@ -45,49 +19,87 @@
             document.getElementById("search_form").submit();
         }
     </script>
+    <style>
+        body{
+            border:0;
+            padding: 0;
+            margin: 0;
+            background-color: #eee;
+        }
+        #list_frame{
+            width:100%;
+        }
+    </style>
 </head>
-<body style="height: 100%;width: 100%;overflow-y: hidden">
-<div id="left_frame">
-    <!--搜索功能区-->
-    <form method="get" action="/buglist" target="list_frame" id="search_form">
-        <table style="width: 95%;height: max-content" class="hidden_table">
-            <tr>
-                <td>
-                    <span class="span1" style="width: 20%;">
-                        <select name="searchby" class="input_text" style="height: 37px;width: 100%;margin: 0;padding: 0;">
-                            <option value="bugname" selected="selected">漏洞名称</option>
-                            <option value="id">漏洞ID</option>
-                            <option value="submituser" th:if="${identity} eq 1">用户ID</option>
-                        </select>
-                    </span>
-                    <span class="span1" style="width: 60%;"><input type="text" name="keyword" class="input_text"  style="height: 35px;width: 100%;margin: 0;padding: 0;"/></span>
-                    <span class="span1" style="width: 20%;"><input type="submit" value="搜索" class="common_button" style="height: 37px;width: 100%;margin: 0;padding: 0;border: 0" /></span>
-                </td>
-            </tr>
-        </table>
-        <button th:if="${identity} eq 0" class="submit_button" onclick="submitNewBug()">提交新漏洞</button>
 
-        <!--只对普通用户显示此按钮-->
-        <br>
-        <span>按审核状态筛选：</span><br>
-        <label><input class="option" type="checkbox" name="checkstatus" id="checkstatus" value="0" checked="checked"
-                      onclick="submitForm()"><span>待审核&emsp;&emsp;</span></label><br>
-        <label><input class="option" name="checkstatus" type="checkbox" value="1" onclick="submitForm()"><span>审核通过&emsp;</span></label><br>
-        <label><input class="option" name="checkstatus" type="checkbox" value="2" onclick="submitForm()"><span>审核未通过</span></label><br>
-        <br>
-        <span>每页显示行数：</span><br>
-        <label><input class="option" type="radio" name="size" value="15" checked="checked" onchange="submitForm()"/><span>15</span></label>&emsp;
-        <label><input class="option" type="radio" name="size" value="25" onchange="submitForm()" /><span>25</span></label>&emsp;
-        <label><input class="option" type="radio" name="size" value="40" onchange="submitForm()" /><span>40</span></label>
-        <input type="text" name="page" id="page" value="1" hidden/>
-    </form>
-</div>
 
-<div id="rignt_frame">
-    <!--搜索结果显示区域-->
-    <iframe src="/buglist" style="height: 100%;width:100%" id="list_frame" name="list_frame">
 
-    </iframe>
-</div>
+
+<body>
+<div class="container-fluid" style="position: absolute;top:5px;bottom: 0">
+    <div class="row">
+        <div class="col-xs-3">
+        <form method="get" action="/buglist" target="list_frame" id="search_form">
+           <div class="panel panel-primary">
+                    <div class="panel-heading">
+                     <h3 class="panel-title">检索</h3>
+                     </div>
+                      <div class="panel-body">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <select name="searchby" class="form-control" style="width: auto">
+                                        <option value="bugname" selected="selected">漏洞名称</option>
+                                        <option value="id">漏洞ID</option>
+                                        <option value="submituser" th:if="${identity} eq 1">用户ID</option>
+                                    </select>
+                                    </div>
+
+                                  <input type="text" class="form-control" name="keyword" placeholder="Search for...">
+                                  <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">Go!</button>
+                                  </span>
+                                </div>
+                             <br>
+                              <p><strong>审核状态</strong></p>
+                               <div class="checkbox"><label><input type="checkbox" name="checkstatus" value="0" onclick="submitForm()" checked>待审核</label></div>
+                                <div class="checkbox"><label><input type="checkbox" name="checkstatus" value="1" onclick="submitForm()">审核通过</label></div>
+                                <div class="checkbox"><label><input type="checkbox" name="checkstatus" value="2" onclick="submitForm()">审核未通过</label></div>                                
+                             <br>
+                              <p><strong>每页显示行数</strong></p>
+                               <div class="radio-inline"><label><input type="radio" onchange="submitForm()" name="size" value="10" checked>10</label></div>
+                               <div class="radio-inline"><label><input type="radio" onchange="submitForm()" name="size" value="15">15</label></div>
+                               <div class="radio-inline"><label><input type="radio" onchange="submitForm()" name="size" value="50">50</label></div>
+                               <input type="text" name="page" id="page" value="1" hidden/>
+                       </div>
+            </div>
+        </form>
+        </div>
+        <div class="col-md-8">
+                   <div class="panel panel-primary">
+               
+           
+                    <div class="panel-heading">
+                     <h3 class="panel-title"><strong th:text="${identity eq 1}?'漏洞':'我提交的漏洞'"></strong></h3>
+                     
+                     </div>
+                      <div class="panel-body" style="padding: 0;border: 0;padding: 0">
+                                      <iframe src="/buglist" id="list_frame" name="list_frame" frameborder="0" style="width:100%"></iframe>
+                       </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        function resizeFrame(fm) {
+            fm.height=0;
+            fm.height=fm.contentWindow.document.documentElement.scrollHeight;
+            window.parent.document.getElementsByTagName('iframe')[0].height = 0;
+            window.parent.document.getElementsByTagName('iframe')[0].height = window.document.documentElement.scrollHeight;
+        }
+
+    </script>
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -18,15 +18,25 @@ public class test implements CommandLineRunner {
     @Autowired
     DepartmentRepository departmentRepository;
 
+
     @Override
     public void run(String... args) throws Exception {
 
-//        User user = userRepository.findUserById(1);
-//        System.out.println(user);
-//
-//        Types type = typesRepository.findTypesById(2);
-//        System.out.println(type);
         // 初始化测试数据
+//        userRepository.save(new User("zky","160811",0));
+//        userRepository.save(new User("test","160811",1));
+//        userRepository.save(new User("user1","160811",0));
+
+//        typesRepository.save(new Types("SQL注入"));
+//        typesRepository.save(new Types("信息泄露"));
+//        typesRepository.save(new Types("弱口令"));
+//        typesRepository.save(new Types("逻辑"));
+//        typesRepository.save(new Types("命令执行"));
+//        typesRepository.save(new Types("权限"));
+//
+
+
+
 //        bugRepository.save(new Bug("测试1",2,"www.hao123.com", "109.123.33.1",0,"测试文本",1,0));
 //        bugRepository.save(new Bug("测试2",1,"www.hao123.com", "109.123.33.1",1,"测试文本",1,0));
 //        bugRepository.save(new Bug("测试3",4,"www.hao123.com", "109.123.33.1",2,"测试文本",1,0));

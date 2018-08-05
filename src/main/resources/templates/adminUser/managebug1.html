@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>管理漏洞</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="author" content="张坤元">
+    <link rel="icon" href="/static/img/%E9%BE%99%E7%8C%AB%E5%A4%B4%E5%83%8F.jpg">
+    <link rel="stylesheet" type="text/css" href="/static/css/box_window.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/ckeditor/ckeditor.js"></script>
+    <script src="/js/submitbug_functions.js"></script>
+    <style>
+        th {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+
+
+<form th:object="${Workorder_Factory}" method="post" action="/admin/managebug">
+    <div style="height: 100%;width: 1200px;border:hidden 0px;margin: 0 auto;">
+        <table class="hidden_table">
+            <tr>
+                <td>漏洞名称：</td>
+                <td><input type="text" th:value="${bug.bugname}" name="bugname" id="bugname" class="input_text"
+                           required/><span class="star_mark">*</span></td>
+            </tr>
+            <tr>
+                <td>漏洞类型：</td>
+                <td>
+                    <select name="bugtype" id="bugtype" class="input_text" style="width: max-content" required>
+                        <option th:each="bugtype : ${bugtypes}" th:value="${bugtype.id}" th:text="${bugtype.bugtype}"
+                                th:selected="${bug.bugtype} eq ${bugtype.bugtype}"></option>
+                    </select><span class="star_mark">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td>漏洞评级：</td>
+                <td>
+                    <select name="bugrank" id="bugrank" class="input_text">
+                        <option value="0" th:selected="${bug.bugrank} eq '低危'">低危</option>
+                        <option value="1" th:selected="${bug.bugrank} eq '中危'">中危</option>
+                        <option value="2" th:selected="${bug.bugrank} eq '高危'">高危</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <!--&lt;!&ndash;存储拼接后的IP&ndash;&gt;-->
+        <!--<textarea hidden name="ip" id="ip"></textarea>-->
+
+        <!--&lt;!&ndash;存储拼接后的URL&ndash;&gt;-->
+        <!--<textarea hidden name="url" id="url"></textarea>-->
+        <input type="text" name="bugid" th:value="${bug.id}" hidden/>
+        <!--<textarea name="date" th:value="${bug.date}" hidden></textarea>-->
+        <input type="text" name="submituser" th:value="${bug.submituser}" hidden/>
+        <input type="text" name="refused" id="refused" value="false" hidden/>
+        <input th:align="left" type="button" class="common_button" onclick="add_row()" value="添加"/>&emsp;<input
+            type="button" onclick="submit_form()" class="submit_button" value="提交工单"/>&emsp;
+        <input type="button" class="submit_button" onclick="refuse_bug()" value="拒绝该漏洞"/>
+        <table class="shown_table" width="100%" id="IUtable">
+            <tr>
+                <th width="15%">IP</th>
+                <th width="20%">URL</th>
+                <th width="10%">部门</th>
+                <th width="10%">选择处理人员</th>
+                <th width="10%">联系人</th>
+                <th width="10%">联系人电话</th>
+                <th width="10%">SOC平台录入</th>
+                <th width="10%">审核意见</th>
+                <th width="5%">操作</th>
+            </tr>
+            <!--这里隐藏一行用来clone-->
+            <tr hidden id="tr_for_cp">
+                <td><input class="input_text_in_table" name="ip" type="text"/></td>
+                <td><input class="input_text_in_table" name="url" type="text"/></td>
+                <td>
+                    <select name="department" class="input_text_in_table">
+                        <option th:each="department:${departments}" th:value="${departmentStat.count}"
+                                th:text="${department.name}"></option>
+                    </select>
+                </td>
+                <td>
+                    <button type="button" class="common_button" onclick="choose_handlers(this)">选择</button>
+                    <!--这里跳出弹窗进行人员选择-->
+                    <input name="handler" type="text" hidden/>
+                </td>
+                <td><p class="name"></p></td>
+                <td><p class="phone"></p></td>
+                <td>
+                    <select name="soc_recorded" class="input_text_in_table">
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                </td>
+                <td>
+                    <button class="common_button" onclick="addcomment(this)" type="button">填写</button>
+                    <textarea hidden name="comment"></textarea>
+                </td>
+                <td><input type="button" value="删除" class="common_button" onclick="delete_row(this)"></td>
+            </tr>
+
+            <tr th:each="ip_s:${bug.ip}">
+                <!--修改这个tr的内容后一定要保证上面的tr同步进行修改-->
+                <td><input class="input_text_in_table" name="ip" th:value="${ip_s}" type="text"/></td>
+                <td><input class="input_text_in_table" name="url" th:value="${bug.url[ip_sStat.index]}" type="text"/></td>
+                <td>
+                    <select name="department" class="input_text_in_table">
+                        <option th:each="department:${departments}" th:value="${departmentStat.count}"
+                                th:text="${department.name}"></option>
+                    </select>
+                </td>
+                <td>
+                    <button type="button" class="common_button" onclick="choose_handlers(this)">选择</button>
+                    <!--这里跳出弹窗进行人员选择-->
+                    <input name="handler" type="text" hidden/>
+                </td>
+                <td><p class="name"></p></td>
+                <td><p class="phone"></p></td>
+                <td>
+                    <select name="soc_recorded" class="input_text_in_table">
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                </td>
+                <td>
+                    <button class="common_button" onclick="addcomment(this)" type="button">填写</button>
+                    <input hidden name="comment" />
+                </td>
+                <td><input type="button" value="删除" class="common_button" onclick="delete_row(this)"></td>
+            </tr>
+        </table>
+
+        <div style="resize:none;width: 100%;" aria-readonly="true" name="description" id="description"  th:utext="${bug.description}"></div>
+    </div>
+    <div id="box_window">
+        <!--弹窗-->
+        <div id="box_content">
+            <div id="box_head">
+                <!--弹窗头部-->
+                <span class="close">
+                    &times;
+                </span>
+            </div>
+            <div id="box_body">
+                <!--弹窗主体-->
+                <iframe id="box_frame"></iframe>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    var box_frame = document.getElementById("box_frame");
+    var box_window = document.getElementById("box_window");
+    var span = document.getElementsByClassName("close")[0];
+
+    function choose_handlers(btn) {
+        // 获取选择的部门代号
+        var dpt_num = btn.parentElement.parentElement.getElementsByTagName("select")[0].value;
+        // 设置行标记
+        btn.parentElement.parentElement.setAttribute("id", "tr_mark");
+        // 将URL设置到弹窗的iframe，并显示弹窗
+        box_frame.setAttribute("src", "/admin/handlers?dpt_num=" + dpt_num);
+        box_window.style.display = "block";
+
+    }
+
+    function addcomment(btn) {
+        // 标记单元格
+        var target = btn.parentElement.getElementsByTagName("input").item(0);
+        target.setAttribute("id", "comment");
+        // 将URL设置到弹窗的iframe，并显示弹窗
+        box_frame.setAttribute("src", "/admin/comment?comment=" + target.getAttribute("value"));
+        box_window.style.display = "block";
+    }
+
+    span.onclick = function () {
+        // 点击关闭弹窗
+        box_window.style.display = "none";
+    }
+
+    function refuse_bug(){
+        // 拒绝漏洞
+        document.getElementById("refused").value="true";
+        submit_form();
+    }
+
+    function submit_form(){
+        document.getElementById("tr_for_cp").remove();  // 提交之前先删除隐藏的这一行，因为其中包含了大量的name属性
+        document.forms.item(0).submit();
+    }
+</script>
+</body>
+</html>
