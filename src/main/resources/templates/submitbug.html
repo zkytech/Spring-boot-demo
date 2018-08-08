@@ -21,18 +21,18 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-md-6 col-xs-12">
                 <br><br>
                 <div class="form-group">
                     <label for="bugname" class="col-xs-3 control-label">漏洞名称：</label>
-                    <div class="col-xs-6" name="bugname" id="bugname">
+                    <div class="col-md-6 col-xs-9" name="bugname" id="bugname">
                         <input class="form-control" type="text" name="bugname" id="bugname" required>
                     </div>
                     <span class="star_mark" style="color:red">*</span>
                 </div>
                 <div class="form-group">
                     <label for="bugtype" class="col-xs-3 control-label">漏洞类型：</label>
-                    <div class="col-xs-4">
+                    <div class="col-md-4 col-xs-9">
                         <select class="form-control" name="bugtype" id="bugtype" required>
                             <option th:each="bugtype : ${bugtypes}" th:value="${bugtype.id}" th:text="${bugtype.bugtype}"></option>
                         </select>
@@ -41,7 +41,7 @@
                 </div>
                 <div class="form-group">
                     <label for="bugrank" class="col-xs-3 control-label">漏洞评级：</label>
-                    <div class="col-xs-3">
+                    <div class="col-md-3 col-xs-9">
                         <select name="bugrank" id="bugrank" class="form-control">
                             <option value="0">低危</option>
                             <option value="1">中危</option>

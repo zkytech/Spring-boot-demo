@@ -17,6 +17,7 @@
             padding-top: 70px;
             background-color: #eee;
         }
+
     </style>
     <script>
         function resizeall(){
@@ -44,6 +45,7 @@
                 <li th:if="${session.signin}"  id="navb2"><a href="javascript:$('#frame1').attr('src','/submitbug')" target="frame1">提交漏洞</a></li>
                 <li th:if="${! session.signin}"  id="navb3"><a href="javascript:$('#frame1').attr('src','/signup')" target="frame1">注册</a></li>
                 <li th:if="${! session.signin}"  id="navb4"><a href="javascript:$('#frame1').attr('src','/signin')" target="frame1">登录</a></li>
+                <li id="navb5"><a href="javascript:$('#frame1').attr('src','/project_info')" target="frame1">项目源码</a></li>
           </ul>
             <div th:if="${session.signin}" class="navbar-right">
                 <p  class="nav navbar-text" th:utext="|欢迎您，${identity}:${username} &emsp;&emsp;&emsp; <a href='/logout' target='_self' class='navbar-link'>注销</a>|">
@@ -81,6 +83,7 @@
                case "/submitbug":$("#navb2").attr("class", "active");break;
                case "/signup":$("#navb3").attr("class", "active");break;
                case "/signin":$("#navb4").attr("class", "active");break;
+               case "/project_info":$("#navb5").attr("class", "active");break;
            }
            resizeall();
        }

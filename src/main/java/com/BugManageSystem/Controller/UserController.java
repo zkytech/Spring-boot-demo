@@ -126,6 +126,11 @@ public class UserController {
         return "redirect:/index";
     }
 
+    @RequestMapping("/project_info")
+    public String project_info_page(){
+        return "project_info";
+    }
+
     @RequestMapping("/init")
     @ResponseBody
     public String init(){

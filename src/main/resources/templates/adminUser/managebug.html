@@ -29,18 +29,18 @@
 <form class="form-horizontal" th:object="${Workorder_Factory}" method="post" action="/admin/managebug">
     <div class="container">
         <div class="row">
-            <div class="col-xs-6">
+            <div class="col-md-6 col-xs-12">
                    <br><br>
                     <div class="form-group">
                         <label for="bugname" class="col-xs-3 control-label">漏洞名称：</label>
-                        <div class="col-xs-6" name="bugname" id="bugname">
+                        <div class="col-md-6 col-xs-9" name="bugname" id="bugname">
                             <input class="form-control" type="text" th:value="${bug.bugname}" name="bugname" id="bugname" required>
                         </div>
                         <span class="star_mark" style="color:red">*</span>
                     </div>
                     <div class="form-group">
                         <label for="bugtype" class="col-xs-3 control-label">漏洞类型：</label>
-                        <div class="col-xs-4">
+                        <div class="col-md-4 col-xs-9">
                             <select class="form-control" name="bugtype" id="bugtype" required>
                                 <option th:each="bugtype : ${bugtypes}" th:value="${bugtype.id}" th:text="${bugtype.bugtype}" th:selected="${bug.bugtype} eq ${bugtype.bugtype}"></option>
                             </select>
@@ -49,7 +49,7 @@
                     </div>
                     <div class="form-group">
                         <label for="bugrank" class="col-xs-3 control-label">漏洞评级：</label>
-                        <div class="col-xs-3">
+                        <div class="col-md-3 col-xs-9">
                             <select name="bugrank" id="bugrank" class="form-control">
                                 <option value="0" th:selected="${bug.bugrank} eq '低危'">低危</option>
                                 <option value="1" th:selected="${bug.bugrank} eq '中危'">中危</option>
@@ -59,17 +59,18 @@
                         <span class="star_mark" style="color:red">*</span>
                     </div>
             </div>
-                <p id="msg_alert"></p>
+
                 <input type="text" name="bugid" th:value="${bug.id}" hidden/>
                 <input type="text" name="submituser" th:value="${bug.submituser}" hidden/>
                 <input type="text" name="refused" id="refused" value="false" hidden/>           
         </div>
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-12  table-responsive">
                 <input th:align="left" type="button" class="btn btn-default" onclick="add_row()" value="添加"/>&emsp;<input
                     type="button" onclick="submit_form()" class="btn btn-success" value="提交工单"/>&emsp;
                 <input type="button" class="btn btn-danger" onclick="refuse_bug()" value="拒绝该漏洞"/>
-                <br><br id="alert_p">
+                <br><br>
+                <p id="msg_alert"></p>
                 <table class="table table-bordered table-hover" style="width: 100%" id="IUtable">
                             <tr>
                                 <th>IP</th>

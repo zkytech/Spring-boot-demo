@@ -29,6 +29,11 @@
         #list_frame{
             width:100%;
         }
+        @media (max-width: 768px) {
+            .mobile_hidden{
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -38,43 +43,51 @@
 <body>
 <div class="container-fluid" style="position: absolute;top:5px;bottom: 0">
     <div class="row">
-        <div class="col-xs-3">
+        <div class="col-md-3 col-xs-12">
         <form method="get" action="/buglist" target="list_frame" id="search_form">
            <div class="panel panel-primary">
                     <div class="panel-heading">
                      <h3 class="panel-title">检索</h3>
                      </div>
                       <div class="panel-body">
-                                <div class="input-group">
-                                    <div class="input-group-btn">
-                                        <select name="searchby" class="form-control" style="width: auto">
-                                        <option value="bugname" selected="selected">漏洞名称</option>
-                                        <option value="id">漏洞ID</option>
-                                        <option value="submituser" th:if="${identity} eq 1">用户ID</option>
-                                    </select>
-                                    </div>
-
+                          <ul class="nav nav-sidebar">
+                              <li>
+                                  <div class="input-group">
+                                  <div class="input-group-btn">
+                                      <select name="searchby" class="form-control" style="width: auto">
+                                          <option value="bugname" selected="selected">漏洞名称</option>
+                                          <option value="id">漏洞ID</option>
+                                          <option value="submituser" th:if="${identity} eq 1">用户ID</option>
+                                      </select>
+                                  </div>
                                   <input type="text" class="form-control" name="keyword" placeholder="Search for...">
                                   <span class="input-group-btn">
                                     <button class="btn btn-default" type="submit">Go!</button>
                                   </span>
-                                </div>
-                             <br>
-                              <p><strong>审核状态</strong></p>
-                               <div class="checkbox"><label><input type="checkbox" name="checkstatus" value="0" onclick="submitForm()" checked>待审核</label></div>
-                                <div class="checkbox"><label><input type="checkbox" name="checkstatus" value="1" onclick="submitForm()">审核通过</label></div>
-                                <div class="checkbox"><label><input type="checkbox" name="checkstatus" value="2" onclick="submitForm()">审核未通过</label></div>                                
-                             <br>
-                              <p><strong>每页显示行数</strong></p>
-                               <div class="radio-inline"><label><input type="radio" onchange="submitForm()" name="size" value="10" checked>10</label></div>
-                               <div class="radio-inline"><label><input type="radio" onchange="submitForm()" name="size" value="15">15</label></div>
-                               <div class="radio-inline"><label><input type="radio" onchange="submitForm()" name="size" value="50">50</label></div>
-                               <input type="text" name="page" id="page" value="1" hidden/>
+                                  </div>
+                              </li>
+                              <li class="mobile_hidden">
+                                  <p><strong>审核状态</strong></p>
+                                  <div class="checkbox"><label><input type="checkbox" name="checkstatus" value="0" onclick="submitForm()" checked>待审核</label></div>
+                                  <div class="checkbox"><label><input type="checkbox" name="checkstatus" value="1" onclick="submitForm()">审核通过</label></div>
+                                  <div class="checkbox"><label><input type="checkbox" name="checkstatus" value="2" onclick="submitForm()">审核未通过</label></div>
+                              </li>
+                              <li class="mobile_hidden">
+                                  <p><strong>每页显示行数</strong></p>
+                                  <div class="radio-inline"><label><input type="radio" onchange="submitForm()" name="size" value="10" checked>10</label></div>
+                                  <div class="radio-inline"><label><input type="radio" onchange="submitForm()" name="size" value="15">15</label></div>
+                                  <div class="radio-inline"><label><input type="radio" onchange="submitForm()" name="size" value="50">50</label></div>
+                                  <input type="text" name="page" id="page" value="1" hidden/>
+                              </li>
+                          </ul>
+
+
+
                        </div>
             </div>
         </form>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8 col-xs-12">
                    <div class="panel panel-primary">
                
            
