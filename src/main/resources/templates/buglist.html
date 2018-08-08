@@ -47,8 +47,7 @@
         </td>
         <td th:if="${identity} eq 1">
             <!--管理员页面才会显示操作栏-->
-            <button type="button" class="btn btn-default"  th:onclick="'javascript:manage_bug('+${bug.id}+')'">
-              操作
+            <button type="button" class="btn btn-default"  th:onclick="'javascript:manage_bug('+${bug.id}+')'" th:disabled="${bug.checkstatus != '待审核'}" th:text="${bug.checkstatus eq '待审核'}?'审核':${bug.checkstatus}">
             </button>
         </td>
     </tr>

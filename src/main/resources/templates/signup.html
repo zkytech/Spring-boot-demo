@@ -12,17 +12,19 @@
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/static/css/signin.css">
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
 
     <script>
         function check_pwd(){
             var pwd = document.getElementById("password").value;
             var pwd1 = document.getElementById("check_password").value;
-            var alert1=document.getElementById("alert");
             if(pwd == pwd1) {
-                alert1.setAttribute("hidden", "hidden");
                 return true;
             }else {
-                alert1.removeAttribute("hidden");
+                $("#msg_alert").html("<div  class=\"alert alert-warning alert-dismissible\" role=\"alert\">\n" +
+                    "    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+                    "    <p>两次输入密码不一致，请重新输入！</p>\n" +
+                    "</div>");
                 return false;
             }
 
@@ -31,16 +33,16 @@
 </head>
 <body>
 <div class="container">
-<form action="/signup" class="form-signin" method="post" onsubmit="return check_pwd()">
-
-        <div th:if="${success}"  class="alert alert-warning alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <p th:text="${success}"></p>
-        </div>
-        <div th:if="${alert}"  class="alert alert-warning alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <p th:text="${alert}"></p>
-        </div>
+    <p id="msg_alert"></p>
+    <div th:if="${success}"  class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p th:text="${success}"></p>
+    </div>
+    <div th:if="${alert}"  class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p th:text="${alert}"></p>
+    </div>
+    <form action="/signup" class="form-signin" method="post" onsubmit="return check_pwd()">
         <h2 class="form-signin-heading">请注册</h2>
         <label for="username" class="sr-only">用户名</label>
         <input type="text" class="form-control" id="username" name="username" placeholder="用户名" required autofocus>
@@ -48,7 +50,7 @@
         <input type="password" class="form-control" placeholder="密码" required name="password" id="password">
 
         <label for="password" class="sr-only">确认密码</label>
-        <input type="password" class="form-control" placeholder="密码" required name="password" id="check_password">
+        <input type="password" class="form-control" placeholder="密码" required name="check_password" id="check_password">
 
         <label for="identity" class=sr-only>用户身份</label>
         <select class="form-control" name="identity" id="identity">
@@ -60,9 +62,9 @@
             </option>
         </select>
         <br>
-        <button type="submit" class="btn btn-primary btn-block btn-lg" onsubmit="check_pwd()">注册</button>
+        <button type="submit" class="btn btn-primary btn-block btn-lg" >注册</button>
 
-</form>
+    </form>
 </div>
 </body>
 </html>

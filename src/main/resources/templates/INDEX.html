@@ -72,7 +72,9 @@
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
    <script>
        function switch_focus(){
-           var src = document.getElementById("frame1").getAttribute("src");
+           var domain = window.document.domain;
+           var location = document.getElementById("frame1").contentWindow.location.href;
+           var src = location.split(domain)[1];
            $("#nav1").children().attr("class", "");
            switch (src){
                case "/bugpanel":$("#navb1").attr("class", "active");break;
@@ -81,7 +83,6 @@
                case "/signin":$("#navb4").attr("class", "active");break;
            }
            resizeall();
-           console.log(src)
        }
    </script>
 

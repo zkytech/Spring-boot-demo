@@ -6,6 +6,7 @@ import com.BugManageSystem.Entity.BugRepository;
 import com.BugManageSystem.Entity.Types;
 import com.BugManageSystem.Entity.TypesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -39,7 +40,7 @@ public class BugController {
         List<Types> bugTypes = typesRepository.findAll();
         model.addAttribute("bugtypes", bugTypes);
         model.addAttribute("userid", (Integer) session.getAttribute("userid"));
-        return "/submitbug";
+        return "submitbug";
     }
 
     @PostMapping("/submitbug")
@@ -195,6 +196,8 @@ public class BugController {
         return "bugpanel";
     }
 
+    @Value("${web.upload-path}")
+    private String rootPath;
 
     @RequestMapping("/fileupload")
     @ResponseBody
@@ -202,14 +205,15 @@ public class BugController {
 
         System.out.println(file.getOriginalFilename());
         Long date = new Date().getTime();
-        String rootPath = ResourceUtils.getURL("classpath:").getPath();
+//        String rootPath = ResourceUtils.getURL("classpath:").getPath();
         System.out.println(rootPath);
-        File pic_path = new File(rootPath, "static/img");
+        File pic_path = new File(rootPath, "/img");
+        System.out.println(pic_path.getPath());
         if (!pic_path.exists()) {
             pic_path.mkdirs();
         }
-        File nf = new File(rootPath + "static/img/", date + file.getOriginalFilename());
-        String img_url = "/img/" + date + file.getOriginalFilename();
+        File nf = new File(pic_path.getPath(), date + file.getOriginalFilename());
+        String img_url = "/static/img/" + date + file.getOriginalFilename();
         FileOutputStream out = new FileOutputStream(nf);
         out.write(file.getBytes());
         out.flush();

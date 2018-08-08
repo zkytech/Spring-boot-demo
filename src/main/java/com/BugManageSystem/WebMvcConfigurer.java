@@ -17,7 +17,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        List<String> excludePath_login = Arrays.asList("/signup","/signin","/index", "/error","/addbugtype","/","/static/**","/test");
+        List<String> excludePath_login = Arrays.asList("/signup","/signin","/index","/init", "/error","/addbugtype","/","/static/**","/test");
         registry.addInterceptor(new signinInterceptor()).order(1).addPathPatterns("/**").excludePathPatterns(excludePath_login);
         registry.addInterceptor(new adminInterceptor()).order(2).addPathPatterns("/admin/**").excludePathPatterns(excludePath_login);
     }

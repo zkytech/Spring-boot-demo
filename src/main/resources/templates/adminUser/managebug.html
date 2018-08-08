@@ -21,6 +21,8 @@
             text-align: center!important;
             vertical-align: middle!important;
         }
+
+
     </style>
 </head>
 <body>
@@ -57,6 +59,7 @@
                         <span class="star_mark" style="color:red">*</span>
                     </div>
             </div>
+                <p id="msg_alert"></p>
                 <input type="text" name="bugid" th:value="${bug.id}" hidden/>
                 <input type="text" name="submituser" th:value="${bug.submituser}" hidden/>
                 <input type="text" name="refused" id="refused" value="false" hidden/>           
@@ -66,7 +69,7 @@
                 <input th:align="left" type="button" class="btn btn-default" onclick="add_row()" value="添加"/>&emsp;<input
                     type="button" onclick="submit_form()" class="btn btn-success" value="提交工单"/>&emsp;
                 <input type="button" class="btn btn-danger" onclick="refuse_bug()" value="拒绝该漏洞"/>
-                <br><br>
+                <br><br id="alert_p">
                 <table class="table table-bordered table-hover" style="width: 100%" id="IUtable">
                             <tr>
                                 <th>IP</th>
@@ -159,8 +162,7 @@
             </div>            
         </div>
     </div>
-</form>   
-    
+</form>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script>
     var box_frame = document.getElementById("box_frame");
@@ -192,9 +194,30 @@
     }
 
     function submit_form(){
+        var check_handler = true;
+        $.map($("input[name='handler']"),function(value,index){
+            if((value.value== "")&& (index > 0)){
+                check_handler =false;
+            }
+        })
+        $.map($("input[name='comment']"), function (value,index) {
+            if((value.value=="")&&(index>0)){
+                $(value).val(" ")
+            }
+        })
+        if (check_handler){
         document.getElementById("tr_for_cp").remove();  // 提交之前先删除隐藏的这一行，因为其中包含了大量的name属性
         document.forms.item(0).submit();
+        return true;
+        }else{
+                $("#msg_alert").html("<div class=\"alert alert-warning alert-dismissible\" role=\"alert\">\n" +
+                    "    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+                    "    <p>请选择处理人员！</p>\n" +
+                    "</div>");
+            return false;
+        }
     }
+
 
     function close_modal(){
         $("#myModal").modal("hide");

@@ -39,6 +39,7 @@ public class Workorder_Factory {
 
     public List<Workorder> getWorkorders(){
         List<Workorder> workorders = new ArrayList<>();
+
         for(int i = 0; i<ip.size();i++){
             workorders.add(new Workorder(bugname,bugtype,bugrank,bugid,ip.get(i), url.get(i),handler.get(i),soc_recorded.get(i),comment.get(i),date));
         }
@@ -125,6 +126,10 @@ public class Workorder_Factory {
         this.date=date;
     }
 
+    @Override
+    public String toString(){
+        return "{ip:"+ip+"\nurl:"+url+"\nhandler:"+handler+"\ncomment"+comment+"\n}";
+    }
 
 
 }
