@@ -1,77 +1,105 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>管理漏洞</title>
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta name="author" content="张坤元">
-    <link rel="icon" href="/static/img/%E9%BE%99%E7%8C%AB%E5%A4%B4%E5%83%8F.jpg">
-    <link rel="stylesheet" type="text/css" href="/static/css/box_window.css">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
-    <script src="/static/js/jquery-3.3.1.min.js"></script>
-    <script src="/static/js/submitbug_functions.js"></script>
-    <style>
-        .control-label{
-            font-size: 15px;
-        }
-        .table th ,.table td{
-            text-align: center!important;
-            vertical-align: middle!important;
-        }
+<head th:replace="bars::head"></head>
+<style>
+    .control-label {
+        font-size: 14px;
+    }
 
-
-    </style>
-</head>
+    .table th, .table td {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+</style>
+<script th:src="@{/static/js/bug_edit.js}"></script>
 <body>
-<form class="form-horizontal" th:object="${Workorder_Factory}" method="post" action="/admin/managebug">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-xs-12">
-                   <br><br>
-                    <div class="form-group">
-                        <label for="bugname" class="col-xs-3 control-label">漏洞名称：</label>
-                        <div class="col-md-6 col-xs-9" name="bugname" id="bugname">
-                            <input class="form-control" type="text" th:value="${bug.bugname}" name="bugname" id="bugname" required>
-                        </div>
-                        <span class="star_mark" style="color:red">*</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="bugtype" class="col-xs-3 control-label">漏洞类型：</label>
-                        <div class="col-md-4 col-xs-9">
-                            <select class="form-control" name="bugtype" id="bugtype" required>
-                                <option th:each="bugtype : ${bugtypes}" th:value="${bugtype.id}" th:text="${bugtype.bugtype}" th:selected="${bug.bugtype} eq ${bugtype.bugtype}"></option>
-                            </select>
-                        </div>
-                        <span class="star_mark" style="color:red">*</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="bugrank" class="col-xs-3 control-label">漏洞评级：</label>
-                        <div class="col-md-3 col-xs-9">
-                            <select name="bugrank" id="bugrank" class="form-control">
-                                <option value="0" th:selected="${bug.bugrank} eq '低危'">低危</option>
-                                <option value="1" th:selected="${bug.bugrank} eq '中危'">中危</option>
-                                <option value="2" th:selected="${bug.bugrank} eq '高危'">高危</option>                                
-                            </select>
-                        </div>
-                        <span class="star_mark" style="color:red">*</span>
-                    </div>
-            </div>
+<div class="container-fluid" style="position: absolute;top:5px;bottom: 0;width: 100%">
+    <div class="row">
+        <div th:replace="bars::top('managebug')"></div>
+    </div>
+    <div class="row" style="margin-top: 52px">
+        <div class="col-xs-12">
+            <form class="form-horizontal" th:object="${Workorder_Factory}" method="post" action="/admin/managebug">
 
-                <input type="text" name="bugid" th:value="${bug.id}" hidden/>
-                <input type="text" name="submituser" th:value="${bug.submituser}" hidden/>
-                <input type="text" name="refused" id="refused" value="false" hidden/>           
-        </div>
-        <div class="row">
-            <div class="col-xs-12  table-responsive">
-                <input th:align="left" type="button" class="btn btn-default" onclick="add_row()" value="添加"/>&emsp;<input
-                    type="button" onclick="submit_form()" class="btn btn-success" value="提交工单"/>&emsp;
-                <input type="button" class="btn btn-danger" onclick="refuse_bug()" value="拒绝该漏洞"/>
-                <br><br>
-                <p id="msg_alert"></p>
-                <table class="table table-bordered table-hover" style="width: 100%" id="IUtable">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12 col-sm-offset-1">
+                        <br><br>
+
+
+                        <div class="form-group form-inline">
+
+                            <div class="col-sm-6 col-xs-12">
+                                <div style="width: 70px;position:absolute;left:15px;top:7px;">
+                                    <label for="bugname" class="control-label">漏洞名称：</label>
+                                </div>
+                                <div style="margin-left: 85px;margin-right:40px">
+                                    <input class="form-control" type="text" th:value="${bug.bugname}" name="bugname"
+                                           id="bugname" style="width: 100%" required>
+                                </div>
+                                <div style="position: absolute;right: 0;top:0;width:40px">
+                                    <span class="star_mark" style="color:red;">*</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group form-inline">
+
+                            <div class="col-sm-4 col-xs-9">
+                                <div style="width: 70px;position:absolute;left:15px;top:7px;">
+                                    <label for="bugtype" class="control-label">漏洞类型：</label>
+                                </div>
+                                <div style="margin-left: 85px;margin-right:40px">
+                                    <select class="form-control" name="bugtype" id="bugtype" style="width: 100%"
+                                            required>
+                                        <option th:each="bugtype : ${bugtypes}" th:value="${bugtype.id}"
+                                                th:text="${bugtype.bugtype}"
+                                                th:selected="${bug.bugtype} eq ${bugtype.bugtype}"></option>
+                                    </select>
+                                </div>
+                                <div style="position: absolute;right: 0;top:0;width:40px">
+                                    <span class="star_mark" style="color:red;">*</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group form-inline">
+
+                            <div class="col-sm-3 col-xs-9">
+                                <div style="width: 70px;position:absolute;left:15px;top:7px;">
+                                    <label for="bugrank" class="control-label">漏洞评级：</label>
+                                </div>
+                                <div style="margin-left: 85px;margin-right:40px">
+                                    <select name="bugrank" id="bugrank" class="form-control" style="width:100%">
+                                        <option value="0" th:selected="${bug.bugrank} eq '低危'">低危</option>
+                                        <option value="1" th:selected="${bug.bugrank} eq '中危'">中危</option>
+                                        <option value="2" th:selected="${bug.bugrank} eq '高危'">高危</option>
+                                    </select>
+                                </div>
+                                <div style="position: absolute;right: 0;top:0;width:40px">
+                                    <span class="star_mark" style="color:red;">*</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="text" name="bugid" th:value="${bug.id}" hidden/>
+                    <input type="text" name="submituser" th:value="${bug.submituser}" hidden/>
+                    <input type="text" name="refused" id="refused" value="false" hidden/>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-8 col-xs-12 col-sm-offset-1">
+                        <input th:align="left" type="button" class="btn btn-default" onclick="add_row()" value="添加"/>&emsp;<input
+                            type="button" onclick="submit_form()" class="btn btn-success" value="提交工单"/>&emsp;
+                        <input type="button" class="btn btn-danger" onclick="refuse_bug()" value="拒绝该漏洞"/>
+                        <br><br>
+                        <p id="msg_alert"></p>
+                        <table class="table table-bordered table-hover" style="width: 100%" id="IUtable">
                             <tr>
                                 <th>IP</th>
                                 <th>URL</th>
@@ -94,7 +122,8 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-default" onclick="choose_handlers(this)">选择</button>
+                                    <button type="button" class="btn btn-default" onclick="choose_handlers(this)">选择
+                                    </button>
                                     <!--这里跳出弹窗进行人员选择-->
                                     <input name="handler" type="text" hidden/>
                                 </td>
@@ -110,13 +139,15 @@
                                     <button class="btn btn-default" onclick="addcomment(this)" type="button">填写</button>
                                     <input hidden name="comment" type="text">
                                 </td>
-                                <td><input type="button" value="删除" class="btn btn-danger" onclick="delete_row(this)"></td>
+                                <td><input type="button" value="删除" class="btn btn-danger" onclick="delete_row(this)">
+                                </td>
                             </tr>
 
                             <tr th:each="ip_s:${bug.ip}">
                                 <!--修改这个tr的内容后一定要保证上面的tr同步进行修改-->
                                 <td><input class="form-control" name="ip" th:value="${ip_s}" type="text"/></td>
-                                <td><input class="form-control" name="url" th:value="${bug.url[ip_sStat.index]}" type="text"/></td>
+                                <td><input class="form-control" name="url" th:value="${bug.url[ip_sStat.index]}"
+                                           type="text"/></td>
                                 <td>
                                     <select name="department" class="form-control">
                                         <option th:each="department:${departments}" th:value="${departmentStat.count}"
@@ -124,7 +155,8 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-default" onclick="choose_handlers(this)">选择</button>
+                                    <button type="button" class="btn btn-default" onclick="choose_handlers(this)">选择
+                                    </button>
                                     <!--这里跳出弹窗进行人员选择-->
                                     <input name="handler" type="text" hidden/>
                                 </td>
@@ -138,34 +170,44 @@
                                 </td>
                                 <td>
                                     <button class="btn btn-default" onclick="addcomment(this)" type="button">填写</button>
-                                    <input hidden name="comment" />
+                                    <input hidden name="comment"/>
                                 </td>
-                                <td><input type="button" value="删除" class="btn btn-danger" onclick="delete_row(this)"></td>
+                                <td><input type="button" value="删除" class="btn btn-danger" onclick="delete_row(this)">
+                                </td>
                             </tr>
                         </table>
-                <h3>漏洞描述</h3>
-                <div style="resize:none;width: 100%;" aria-readonly="true" name="description" id="description"  th:utext="${bug.description}"></div>
+                        <h3>漏洞描述</h3>
+                        <div style="resize:none;width: 100%;" aria-readonly="true" name="description" id="description"
+                             th:utext="${bug.description}"></div>
 
-                <!-- 模态框（Modal） -->
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                <h4 class="modal-title" id="myModalLabel"></h4>
-                            </div>
-                            <div class="modal-body"><iframe id="box_frame" style="width: 100%;height:500px;border: 0;padding: 0;margin: 0;"></iframe></div>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
+                        <!-- 模态框（Modal） -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel"></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <iframe id="box_frame"
+                                                style="width: 100%;height:500px;border: 0;padding: 0;margin: 0;"></iframe>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div>
+                        <!-- /.modal -->
+
+                    </div>
                 </div>
-                <!-- /.modal -->
 
-            </div>            
+            </form>
+
         </div>
     </div>
-</form>
-    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-    <script>
+</div>
+<script>
     var box_frame = document.getElementById("box_frame");
 
     function choose_handlers(btn) {
@@ -188,39 +230,39 @@
         $('#myModal').modal('show')
     }
 
-    function refuse_bug(){
+    function refuse_bug() {
         // 拒绝漏洞
-        document.getElementById("refused").value="true";
+        document.getElementById("refused").value = "true";
         submit_form();
     }
 
-    function submit_form(){
+    function submit_form() {
         var check_handler = true;
-        $.map($("input[name='handler']"),function(value,index){
-            if((value.value== "")&& (index > 0)){
-                check_handler =false;
+        $.map($("input[name='handler']"), function (value, index) {
+            if ((value.value == "") && (index > 0)) {
+                check_handler = false;
             }
         })
-        $.map($("input[name='comment']"), function (value,index) {
-            if((value.value=="")&&(index>0)){
+        $.map($("input[name='comment']"), function (value, index) {
+            if ((value.value == "") && (index > 0)) {
                 $(value).val(" ")
             }
         })
-        if (check_handler){
-        document.getElementById("tr_for_cp").remove();  // 提交之前先删除隐藏的这一行，因为其中包含了大量的name属性
-        document.forms.item(0).submit();
-        return true;
-        }else{
-                $("#msg_alert").html("<div class=\"alert alert-warning alert-dismissible\" role=\"alert\">\n" +
-                    "    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
-                    "    <p>请选择处理人员！</p>\n" +
-                    "</div>");
+        if (check_handler) {
+            document.getElementById("tr_for_cp").remove();  // 提交之前先删除隐藏的这一行，因为其中包含了大量的name属性
+            document.forms.item(0).submit();
+            return true;
+        } else {
+            $("#msg_alert").html("<div class=\"alert alert-warning alert-dismissible\" role=\"alert\">\n" +
+                "    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+                "    <p>请选择处理人员！</p>\n" +
+                "</div>");
             return false;
         }
     }
 
 
-    function close_modal(){
+    function close_modal() {
         $("#myModal").modal("hide");
     }
 </script>

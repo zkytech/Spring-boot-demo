@@ -1,6 +1,7 @@
 package com.BugManageSystem.Controller;
 
 import com.BugManageSystem.Entity.*;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.net.HttpCookie;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -35,19 +38,23 @@ public class UserController {
 
     @GetMapping("/")
     public String mainPage(){
-        return "redirect:/index";
+        return "redirect:/signin";
     }
 
     @GetMapping("/signin")
-    public String signinPage(@RequestParam(required = false) String success, Model model){
-        if(success!=null){
-            model.addAttribute("success", success);
+    public String signinPage(@RequestParam(name="msg", required = false)String msg, Model model){
+        if(msg != null){
+            model.addAttribute("msg",true);
+        }else {
+            model.addAttribute("msg", false);
         }
         return "signin";
     }
 
     @PostMapping("/signin")
-    public String signin(User user, String remember_me, HttpSession session, HttpServletResponse respons,HttpServletRequest request, Model model){
+    @ResponseBody
+    public Map<String, Boolean> signin(User user, String remember_me, HttpSession session, HttpServletResponse respons){
+        Map<String, Boolean> result = new HashMap<String, Boolean>();
         if(repository.signinCheck(user.getUsername(),user.getPassword(), user.getIdentity()).size()==1){
             //登录验证成功
             Example<User> example = Example.of(user);
@@ -62,39 +69,25 @@ public class UserController {
                 cookie.setMaxAge(2592000);
                 respons.addCookie(cookie);
             }
-
+            String identity_str = null;
+            switch (user.getIdentity()){
+                case 0: identity_str="普通用户";break;
+                case 1: identity_str="管理员";break;
+                default: identity_str="未知账户类型";break;
+            }
             session.setAttribute("username", user.getUsername());
             System.out.println("Setting username="+user.getUsername());
             session.setAttribute("identity", user.getIdentity());
             session.setAttribute("userid", userid);
             session.setAttribute("signin", true);
-            model.addAttribute("message", "成功登陆！<script>setTimeout(function(){window.top.location='/index';}, 1000)</script>");
-            return "message";
+            session.setAttribute("identity_str", identity_str);
+            result.put("success", true);
+            return result;
         }else {
             //登录验证失败
-            model.addAttribute("alert", "账号或密码错误");
-            return "signin";
+            result.put("success", false);
+            return result;
         }
-    }
-
-    @RequestMapping("/index")
-    public String indexPage(HttpSession session, Model model){
-
-        if(!(boolean)session.getAttribute("signin")){
-            session.setAttribute("signin", false);
-        }else {
-        Integer identity_num =(Integer) session.getAttribute("identity");   // 在adminInterceptor中检查这一属性
-        String username =(String) session.getAttribute("username");     // 在signinInterceptor中检查这一属性
-        Integer userid = (Integer) session.getAttribute("userid");
-        String identity= "";
-        switch (identity_num){
-            case 0:identity="用户";break;
-            case 1:identity="审核员";break;
-        }
-        model.addAttribute("identity", identity);
-        model.addAttribute("username", username);
-        model.addAttribute("userid", userid);}
-        return "INDEX";
     }
 
     @GetMapping("/signup")
@@ -103,27 +96,27 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(User user, Model model, RedirectAttributes redirectAttributes){
+    @ResponseBody
+    public Map signup(User user, Model model, RedirectAttributes redirectAttributes){
         String username = user.getUsername();
+        Map result = new HashMap();
         if(repository.checkUsernameUnique(username).size()>=1){
             // 用户名已经存在，不允许注册
             model.addAttribute("alert", "用户名已被注册，请修改用户名");
-            return "signup";
+            result.put("success", false);
+            return result;
         }
         System.out.println("Saving to table");
         repository.save(user);
         redirectAttributes.addFlashAttribute("success","注册成功，现在开始登录吧！");
-        return "redirect:/signin";
+        result.put("success", true);
+        return  result;
     }
-    @RequestMapping("/test")
-    public String testPage(){
-        return "test";
-    }
-//TODO:添加注销/登出功能
+
     @RequestMapping("/logout")
     String logout(HttpSession session){
         session.invalidate();
-        return "redirect:/index";
+        return "redirect:/";
     }
 
     @RequestMapping("/project_info")

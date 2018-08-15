@@ -5,6 +5,7 @@ import com.BugManageSystem.Entity.Bug;
 import com.BugManageSystem.Entity.BugRepository;
 import com.BugManageSystem.Entity.Types;
 import com.BugManageSystem.Entity.TypesRepository;
+import com.sun.deploy.net.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -63,9 +64,23 @@ public class BugController {
         return "addbugtype";
     }
 
+    @GetMapping("/test/list")
+    @ResponseBody
+    public List<FormatedBug> testlist(HttpServletResponse response){
+        List<Bug> bugs = bugRepository.findAll();
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        List<FormatedBug> formatedBugs = new ArrayList<FormatedBug>();
+        for (Bug bug : bugs) {
+            formatedBugs.add(bug.getFormatedBug());
+        }
+        return formatedBugs;
+    }
+
     @GetMapping("/buglist")
-    public String buglistPage(@RequestParam(required = true, defaultValue = "") String keyword, @RequestParam(required = true, defaultValue = "1") Integer page,
+    @ResponseBody
+    public Map buglistPage(@RequestParam(required = true, defaultValue = "") String keyword, @RequestParam(required = true, defaultValue = "1") Integer page,
                               @RequestParam(required = true, defaultValue = "10") Integer size, @RequestParam(required = true, defaultValue = "bugname") String searchby, HttpSession session, Model model, @RequestParam(required = true, defaultValue = "0") Integer[] checkstatus) {
+        Map result = new HashMap();
         Integer userid = (Integer) session.getAttribute("userid");
         Integer identity = (Integer) session.getAttribute("identity");
         Sort sort = new Sort(Sort.Direction.DESC, "id");
@@ -147,9 +162,6 @@ public class BugController {
         for (Bug bug : bugs) {
             formatedBugs.add(bug.getFormatedBug());
         }
-        model.addAttribute("bugs", formatedBugs);
-        model.addAttribute("page", page);
-        model.addAttribute("max_page", max_page);
         // 生成翻页按钮序列
         int start = page - 5;
         int end = page + 5;
@@ -168,11 +180,12 @@ public class BugController {
         for (int i = start; i <= end; i++) {
             pages.add(i);
         }
-        model.addAttribute("identity", (Integer) session.getAttribute("identity"));
-        model.addAttribute("pages", pages);
-
-        return "buglist";
-
+        result.put("bugs", formatedBugs);
+        result.put("page", page);
+        result.put("max_page", max_page);
+        result.put("identity", (Integer) session.getAttribute("identity"));
+        result.put("pages", pages);
+        return result;
     }
 
     @GetMapping("/showinfo")

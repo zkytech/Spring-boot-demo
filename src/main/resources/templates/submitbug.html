@@ -1,91 +1,138 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>提交漏洞</title>
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta name="author" content="张坤元">
-    <link rel="icon" href="/static/img/%E9%BE%99%E7%8C%AB%E5%A4%B4%E5%83%8F.jpg">
-    <meta name="description" content="工单管理系统">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
-    <script src="/static/js/jquery-3.3.1.min.js"></script>
-    <script src="/static/ckeditor/ckeditor.js"></script>
-    <script src="/static/js/submitbug_functions.js"></script>
-
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="bars::head"></head>
+<script th:src="@{/static/js/bug_edit.js}"></script>
+<script th:src="@{/static/ckeditor/ckeditor.js}"></script>
 <body>
-<form th:object="${Bug}" class="form form-horizontal" method="post" action="/submitbug" >
+<style>
+    .control-label {
+        font-size: 14px;
+    }
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-xs-12">
-                <br><br>
-                <div class="form-group">
-                    <label for="bugname" class="col-xs-3 control-label">漏洞名称：</label>
-                    <div class="col-md-6 col-xs-9" name="bugname" id="bugname">
-                        <input class="form-control" type="text" name="bugname" id="bugname" required>
-                    </div>
-                    <span class="star_mark" style="color:red">*</span>
-                </div>
-                <div class="form-group">
-                    <label for="bugtype" class="col-xs-3 control-label">漏洞类型：</label>
-                    <div class="col-md-4 col-xs-9">
-                        <select class="form-control" name="bugtype" id="bugtype" required>
-                            <option th:each="bugtype : ${bugtypes}" th:value="${bugtype.id}" th:text="${bugtype.bugtype}"></option>
-                        </select>
-                    </div>
-                    <span class="star_mark" style="color:red">*</span>
-                </div>
-                <div class="form-group">
-                    <label for="bugrank" class="col-xs-3 control-label">漏洞评级：</label>
-                    <div class="col-md-3 col-xs-9">
-                        <select name="bugrank" id="bugrank" class="form-control">
-                            <option value="0">低危</option>
-                            <option value="1">中危</option>
-                            <option value="2">高危</option>
-                        </select>
-                    </div>
-                    <span class="star_mark" style="color:red">*</span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <!--存储拼接后的IP-->
-                <textarea hidden name="ip" id="ip"></textarea>
-                <textarea hidden name="checkstatus" id="checkstatus">0</textarea>
+    .table th, .table td {
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+</style>
+<div class="container-fluid" style="position: absolute;top:5px;bottom: 0;width: 100%">
+    <div class="row">
+        <div th:replace="bars::top('submitbug')"></div>
+    </div>
+    <div class="row" style="margin-top: 52px">
+        <div class="col-xs-12">
+            <form th:object="${Bug}" class="form form-horizontal" method="post" action="/submitbug">
 
-                <!--存储拼接后的URL-->
-                <textarea hidden name="url" id="url"></textarea>
-                <textarea hidden name="submituser" th:text="${userid}"></textarea>
-                <button th:align="left" type="button" class="btn btn-default" onclick="add_row()">添加</button>
-                <br>
-                <table class="table table-bordered" id="IUtable">
-                    <thead>
-                    <tr>
-                        <th style="width: 40%;text-align: center;">IP</th><th style="width: 40%;text-align: center;">URL</th><th style="width: 20%;text-align: center;">操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!--这里隐藏一行用来clone-->
-                    <tr hidden id="tr_for_cp">
-                        <td ><input class="form-control" type="text"/></td><td><input class="form-control" type="text" /></td><td><input type="button" value="删除" class="btn btn-danger" onclick="delete_row(this)"></td>
-                    </tr>
-                    <tr>
-                        <td><input  class="form-control" type="text"/></td><td><input class="form-control" type="text" /></td><td><input type="button" value="删除" class="btn btn-danger" onclick="delete_row(this)"></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <input type="button" class="btn btn-success" onclick="build_table()" value="漏洞提交"/>
-                <textarea name="description" id="description"></textarea>
-            </div>
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12 col-sm-offset-1">
+                        <br><br>
+
+                        <div class="form-group form-inline">
+
+                            <div class="col-sm-6 col-xs-12">
+                                <div style="width: 70px;position:absolute;left:15px;top:7px;">
+                                    <label for="bugname" class="control-label">漏洞名称：</label>
+                                </div>
+                                <div style="margin-left: 85px;margin-right:40px">
+                                    <input class="form-control" type="text" name="bugname" id="bugname"
+                                           style="width:100%" required>
+                                </div>
+                                <div style="position: absolute;right: 0;top:0;width:40px">
+                                    <span class="star_mark" style="color:red;">*</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group form-inline">
+
+                            <div class="col-sm-4 col-xs-9">
+                                <div style="width: 70px;position:absolute;left:15px;top:7px;">
+                                    <label for="bugtype" class="control-label">漏洞类型：</label>
+                                </div>
+                                <div style="margin-left: 85px;margin-right:40px">
+                                    <select class="form-control" name="bugtype" id="bugtype" style="width: 100%"
+                                            required>
+                                        <option th:each="bugtype : ${bugtypes}" th:value="${bugtype.id}"
+                                                th:text="${bugtype.bugtype}"></option>
+                                    </select>
+                                </div>
+                                <div style="position: absolute;right: 0;top:0;width:40px">
+                                    <span class="star_mark" style="color:red;">*</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group form-inline">
+
+                            <div class="col-sm-2 col-xs-9">
+                                <div style="width: 70px;position:absolute;left:15px;top:7px;">
+                                    <label for="bugrank" class="control-label">漏洞评级：</label>
+                                </div>
+                                <div style="margin-left: 85px;margin-right:40px">
+                                    <select name="bugrank" id="bugrank" class="form-control" style="width:100%">
+                                        <option value="0">低危</option>
+                                        <option value="1">中危</option>
+                                        <option value="2">高危</option>
+                                    </select>
+                                </div>
+                                <div style="position: absolute;right: 0;top:0;width:40px">
+                                    <span class="star_mark" style="color:red;">*</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8 col-xs-12 col-sm-offset-1">
+                        <!--存储拼接后的IP-->
+                        <textarea hidden name="ip" id="ip"></textarea>
+                        <textarea hidden name="checkstatus" id="checkstatus">0</textarea>
+
+                        <!--存储拼接后的URL-->
+                        <textarea hidden name="url" id="url"></textarea>
+                        <textarea hidden name="submituser" th:text="${userid}"></textarea>
+                        <button th:align="left" type="button" class="btn btn-default" onclick="add_row()">添加</button>
+                        <br>
+                        <table class="table table-bordered" id="IUtable">
+                            <thead>
+                            <tr>
+                                <th style="text-align: center;">IP</th>
+                                <th style="text-align: center;">URL</th>
+                                <th style="width:70px;text-align: center;">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!--这里隐藏一行用来clone-->
+                            <tr hidden id="tr_for_cp">
+                                <td><input class="form-control" type="text"/></td>
+                                <td><input class="form-control" type="text"/></td>
+                                <td><input type="button" value="删除" class="btn btn-danger" onclick="delete_row(this)">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input class="form-control" type="text"/></td>
+                                <td><input class="form-control" type="text"/></td>
+                                <td><input type="button" value="删除" class="btn btn-danger" onclick="delete_row(this)">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <input type="button" class="btn btn-success" onclick="build_table()" value="漏洞提交"/>
+                        <textarea name="description" id="description"></textarea>
+                    </div>
+                </div>
+            </form>
+
         </div>
     </div>
-</form>
-<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+</div>
+</body>
+</html>
+
 <script>
     CKEDITOR.replace("description");
 </script>

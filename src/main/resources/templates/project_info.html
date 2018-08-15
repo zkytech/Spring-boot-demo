@@ -1,32 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>project_info</title>
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta name="author" content="张坤元">
-    <link rel="icon" href="/static/img/%E9%BE%99%E7%8C%AB%E5%A4%B4%E5%83%8F.jpg">
-    <meta name="description" content="工单管理系统">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="bars::head"></head>
 <body>
-<div class="container">
-    <div class="jumbotron">
-        <h1>jsp+servlet</h1>
-        <p>使用jsp+servlet开发的版本</p>
-        <p>
-            <a class="btn btn-lg btn-primary" href="https://github.com/zkytech/BugManageSystem" target="_blank" role="button">View source code &raquo;</a>
-        </p>
+<div class="container-fluid" style="position: absolute;top:5px;bottom: 0;width: 100%">
+    <div class="row">
+        <div th:replace="bars::top('project_info')"></div>
     </div>
-    <div class="jumbotron">
-        <h1>Springboot+BootStrap</h1>
-        <p>使用Springboot开发后端，BootStrap框架开发前端，支持响应式布局</p>
-        <p>
-            <a class="btn btn-lg btn-primary" href="https://github.com/zkytech/Spring-boot-demo" target="_blank" role="button">View source code &raquo;</a>
-        </p>
+    <div class="row" style="margin-top: 52px">
+        <div class="col-xs-12">
+            <div class="jumbotron">
+                <h1>jsp+servlet</h1>
+                <p>使用jsp+servlet开发的版本</p>
+                <p>
+                    <a class="btn btn-lg btn-primary" href="https://github.com/zkytech/BugManageSystem" target="_blank" role="button">View source code &raquo;</a>
+                </p>
+            </div>
+            <div class="jumbotron">
+                <h1>Springboot+BootStrap</h1>
+                <p>使用Springboot开发后端，BootStrap框架开发前端，支持响应式布局</p>
+                <p>
+                    <a class="btn btn-lg btn-primary" href="https://github.com/zkytech/Spring-boot-demo" target="_blank" role="button">View source code &raquo;</a>
+                </p>
+            </div>
+
+        </div>
     </div>
 </div>
+</body>
+</html>
 </body>
 </html>

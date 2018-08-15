@@ -6,10 +6,8 @@ import com.BugManageSystem.Entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Controller
@@ -27,8 +25,8 @@ public class AdminController {
     WorkorderRepository workorderRepository;
 
 
-    @GetMapping("/managebug")
-    String managebugPage(@RequestParam(required = true)Long id, Model model){
+    @GetMapping("/managebug/{bugid}")
+    String managebugPage(@PathVariable("bugid") Long id, Model model){
         FormatedBug bug = bugRepository.findBugByid(id).getFormatedBug();
         List<Types> bugtypes = typesRepository.findAll();
         List<Department> departments = departmentRepository.findAll();

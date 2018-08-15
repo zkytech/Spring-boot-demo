@@ -1,71 +1,73 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>注册</title>
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta name="author" content="张坤元">
-    <link rel="icon" href="/static/img/%E9%BE%99%E7%8C%AB%E5%A4%B4%E5%83%8F.jpg">
-    <meta name="description" content="工单管理系统">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="/static/css/signin.css">
-    <script src="/static/js/jquery-3.3.1.min.js"></script>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="bars::head"></head>
+<link rel="stylesheet" th:href="@{/static/css/signin.css}">
 
-    <script>
-        function check_pwd(){
-            var pwd = document.getElementById("password").value;
-            var pwd1 = document.getElementById("check_password").value;
-            if(pwd == pwd1) {
-                return true;
-            }else {
-                $("#msg_alert").html("<div  class=\"alert alert-warning alert-dismissible\" role=\"alert\">\n" +
-                    "    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
-                    "    <p>两次输入密码不一致，请重新输入！</p>\n" +
-                    "</div>");
-                return false;
-            }
-
-        }
-    </script>
-
-</head>
 <body>
-<div class="container">
-    <p id="msg_alert"></p>
-    <div th:if="${success}"  class="alert alert-warning alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <p th:text="${success}"></p>
+<div class="container-fluid" style="position: absolute;top:5px;bottom: 0;width: 100%">
+    <div class="row">
+        <div th:replace="bars::top('signup')"></div>
     </div>
-    <div th:if="${alert}"  class="alert alert-warning alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <p th:text="${alert}"></p>
+    <div class="row" style="margin-top: 52px">
+        <div class="col-xs-12">
+            <form action="/signup" class="form-signin" method="post" onsubmit="return check_pwd()">
+                <h2 class="form-signin-heading">请注册</h2>
+                <label for="username" class="sr-only">用户名</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="用户名" required autofocus>
+                <label for="password" class="sr-only">密码</label>
+                <input type="password" class="form-control" placeholder="密码" required name="password" id="password">
+
+                <label for="password" class="sr-only">确认密码</label>
+                <input type="password" class="form-control" placeholder="密码" required name="check_password" id="check_password">
+
+                <label for="identity" class=sr-only>用户身份</label>
+                <select class="form-control" name="identity" id="identity">
+                    <option value="0" selected>
+                        普通用户
+                    </option>
+                    <option value="1">
+                        审核员
+                    </option>
+                </select>
+                <br>
+                <button type="button" class="btn btn-primary btn-block btn-lg" >注册</button>
+            </form>
+        </div>
     </div>
-    <form action="/signup" class="form-signin" method="post" onsubmit="return check_pwd()">
-        <h2 class="form-signin-heading">请注册</h2>
-        <label for="username" class="sr-only">用户名</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="用户名" required autofocus>
-        <label for="password" class="sr-only">密码</label>
-        <input type="password" class="form-control" placeholder="密码" required name="password" id="password">
-
-        <label for="password" class="sr-only">确认密码</label>
-        <input type="password" class="form-control" placeholder="密码" required name="check_password" id="check_password">
-
-        <label for="identity" class=sr-only>用户身份</label>
-        <select class="form-control" name="identity" id="identity">
-            <option value="0" selected>
-                普通用户
-            </option>
-            <option value="1">
-                审核员
-            </option>
-        </select>
-        <br>
-        <button type="submit" class="btn btn-primary btn-block btn-lg" >注册</button>
-
-    </form>
 </div>
+<script>
+    $("form>button").click(function () {
+        // 先检查两次输入的密码是否一致
+        if($("#password").val() != $("#check_password").val()){
+            $("                <div class=\"alert alert-warning alert-dismissible\" role=\"alert\">\n" +
+                "                    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+                "                    <p id=\"msg\">两次输入的密码不一致，请重新输入</p>\n" +
+                "                </div>").insertBefore($("form"))
+            return;
+        }else {
+            $("alert-warning").hide()
+        }
+        // 提交数据
+        $.ajax(
+            {
+                url:"[[@{/signup}]]",
+                method:"POST",
+                dataType:"json",
+                data:"username="+$("#username").val()+"&password="+$("#password").val()+"&identity="+$("#identity").val(),
+                success:function (data) {
+                    console.log(data);
+                    if(data.success){
+                        window.location = "[[@{/signin?msg=success}]]"
+                    }else {
+                        $("                <div class=\"alert alert-warning alert-dismissible\" role=\"alert\">\n" +
+                            "                    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+                            "                    <p id=\"msg\">用户名已被注册，请更换用户名</p>\n" +
+                            "                </div>").insertBefore($("form"))
+                    }
+                }
+            }
+        )
+    })
+</script>
 </body>
 </html>
