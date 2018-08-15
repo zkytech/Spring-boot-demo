@@ -25,12 +25,12 @@
             <table class="table table-bordered table-hover" style="width: 100%" id="bug_table">
                 <thead>
                 <tr>
-                    <th>名称</th>
-                    <th>类型</th>
-                    <th>等级</th>
-                    <th>时间</th>
-                    <th>详细信息</th>
-                    <th th:if="${session.identity eq 1}" >操作</th>
+                    <th width="25%">名称</th>
+                    <th width="10%">类型</th>
+                    <th width="10%">等级</th>
+                    <th width="20%">时间</th>
+                    <th width="20%">详细信息</th>
+                    <th th:if="${session.identity eq 1}" width="15%">操作</th>
                     <!--管理员页面才会显示操作栏-->
                 </tr>
                 </thead>
