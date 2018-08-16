@@ -42,7 +42,11 @@ public class UserController {
     }
 
     @GetMapping("/signin")
-    public String signinPage(@RequestParam(name="msg", required = false)String msg, Model model){
+    public String signinPage(@RequestParam(name = "msg", required = false) String msg, Model model, HttpSession session) {
+        if (session.getAttribute("signin") != null && (Boolean) session.getAttribute("signin")) {
+            return "redirect:/bugpanel";
+        }
+
         if(msg != null){
             model.addAttribute("msg",true);
         }else {
@@ -55,6 +59,7 @@ public class UserController {
     @ResponseBody
     public Map<String, Boolean> signin(User user, String remember_me, HttpSession session, HttpServletResponse respons){
         Map<String, Boolean> result = new HashMap<String, Boolean>();
+
         if(repository.signinCheck(user.getUsername(),user.getPassword(), user.getIdentity()).size()==1){
             //登录验证成功
             Example<User> example = Example.of(user);
@@ -64,6 +69,8 @@ public class UserController {
             userid= nuser.get().getId();}
             if(remember_me!=null){
                 // 一个月内免登录
+                System.out.println("111111111111111111111111");
+                System.out.println(remember_me);
                 session.setMaxInactiveInterval(2592000);
                 Cookie cookie = new Cookie("JSESSIONID", session.getId());
                 cookie.setMaxAge(2592000);

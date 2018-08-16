@@ -1,7 +1,21 @@
-
-<configuration    scan="true" scanPeriod="1800 seconds" debug="false" >
+<configuration scan="true" scanPeriod="1800 seconds" debug="true">
     <!-- 控制台输出 -->
+    <logger name="jdbc.sqlonly" level="INFO"/>
+    <logger name="jdbc.sqltiming" level="DEBUG"/>
+    <!--<logger name="jdbc.resultsettable" level="DEBUG"/>-->
+    <logger name="jdbc.resultset" level="DEBUG"/>
+    <logger name="jdbc.connection" level="DEBUG"/>
+    <logger name="jdbc.audit" level="DEBUG"/>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 设置过滤级别 -->
+            <level>INFO</level>
+            <!-- 用于配置符合过滤条件的操作 -->
+            <onMatch>ACCEPT</onMatch>
+            <!-- 用于配置不符合过滤条件的操作 -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
@@ -37,15 +51,11 @@
         </encoder>
     </appender>
 
-　　<root level="INFO">
+    　　
+    <root level="info">
 　　　　　　　<appender-ref ref="STDOUT" />
 　　</root>
-    <logger name="org.hibernate" level="WARN" />
-    <logger name="jdbc.sqlonly" level="WARN"/>
-    <logger name="jdbc.sqltiming" level="INFO"/>
-    <logger name="jdbc.resultsettable" level="INFO"/>
-    <logger name="jdbc.resultset" level="WARN"/>
-    <logger name="jdbc.connection" level="WARN"/>
-    <logger name="jdbc.audit" level="WARN"/>
+    <!--<logger name="org.hibernate" level="WARN" />-->
+
 </configuration>
 

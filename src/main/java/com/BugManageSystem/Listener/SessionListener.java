@@ -15,6 +15,8 @@ public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
         httpSessionEvent.getSession().setAttribute("signin", false);
+        // 30分钟内无操作，自动注销session
+        httpSessionEvent.getSession().setMaxInactiveInterval(1800);
     }
 
     @Override

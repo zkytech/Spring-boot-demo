@@ -32,7 +32,7 @@
                 </select>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" value="remember_me" name="remember_me" id="remember_me"> 记住我(一个月内自动登陆)
+                        <input type="checkbox" name="remember_me" id="remember_me"> 记住我(一个月内自动登陆)
                     </label>
                 </div>
                 <button class="btn btn-primary btn-block btn-lg" type="submit" onclick="javascript:return false;">登录</button>
@@ -47,12 +47,13 @@
         $("form>.btn").click(
             function(){
                 // 通过ajax与服务器进行通信，根据服务器返回的json数据进行相应的动作
+                var fd = $(".form-signin").serialize();
             $.ajax(
                 {
                     type:"POST",
                     url:"[[@{/signin}]]",
                     dataType:"json",
-                    data:"username="+$("#username").val()+"&password="+$("#password").val()+"&identity="+$("#identity").val()+"&remember_me="+$("#remember_me").val(),
+                    data: fd,
                     success:function(data){
                         if(data.success){
                             window.location="[[@{/bugpanel}]]";
